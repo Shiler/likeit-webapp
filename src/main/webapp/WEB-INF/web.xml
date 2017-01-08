@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+    <servlet>
+        <display-name>AppController</display-name>
+        <servlet-name>AppController</servlet-name>
+        <servlet-class>ru.shiler.likeit.controller.AppController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AppController</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <context-param>
+        <param-name>dbURL</param-name>
+        <param-value>jdbc:mysql://localhost/likeit!</param-value>
+    </context-param>
+    <context-param>
+        <param-name>dbUser</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <context-param>
+        <param-name>dbUserPwd</param-name>
+        <param-value>root</param-value>
+    </context-param>
+
+</web-app>

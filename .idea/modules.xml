@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Like it!.iml" filepath="$PROJECT_DIR$/.idea/modules/Like it!.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Like_it!_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Like_it!_main.iml" group="Like it!" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Like_it!_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Like_it!_test.iml" group="Like it!" />
+    </modules>
+  </component>
+</project>
