@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import ru.shiler.likeit.database.dao.GenericDao;
 import ru.shiler.likeit.database.dao.Identified;
-import ru.shiler.likeit.model.User;
+import ru.shiler.likeit.model.user.User;
 
 import java.util.List;
 
@@ -38,20 +38,20 @@ public abstract class GenericDaoTest<Context> {
 
     private User getTestUser() {
         User user = new User();
-        user.setUsername("test");
-        user.setEmail("test");
-        user.setPassword("test");
-        user.setRole(1);
-        user.setStatus(1);
-        user.setAge(1);
-        user.setName("test");
+//        user.setUsername("test");
+//        user.setEmail("test");
+//        user.setPassword("test");
+//        user.setRole(1);
+//        user.setStatus(1);
+//        user.setAge(1);
+//        user.setName("test");
         return user;
     }
 
 
     @Test
     public void testGetByPK() throws Exception {
-        Identified dto = dao().getByPK(2);
+        Identified dto = dao().getByPK(1);
         Assert.assertNotNull(dto);
     }
 
@@ -64,7 +64,7 @@ public abstract class GenericDaoTest<Context> {
 
         int oldSize = list.size();
         Assert.assertTrue(oldSize > 0);
-        Identified dto = dao().getByPK(2);
+        Identified dto = dao().getByPK(1);
         dao().delete(dto);
 
         list = dao().getAll();

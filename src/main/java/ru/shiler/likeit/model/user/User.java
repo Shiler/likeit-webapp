@@ -1,6 +1,8 @@
-package ru.shiler.likeit.model;
+package ru.shiler.likeit.model.user;
 
 import ru.shiler.likeit.database.dao.Identified;
+
+import java.util.Date;
 
 /**
  * Created by Evgeny Yushkevich on 22.11.2016.
@@ -8,33 +10,40 @@ import ru.shiler.likeit.database.dao.Identified;
 public class User implements Identified<Integer> {
 
     private int id;
-    private String username;
+    private String userName;
+    private String fullName;
     private String email;
     private String password;
-    private String createTime;
-    private String updateTime;
-    private int role;
+    private Date createTime;
+    private UserRole userRole;
     private int status;
     private int age;
     private String hobbies;
     private int avatar;
-    private String name;
 
     @Override
     public Integer getId() {
         return id;
     }
 
-    protected void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -53,28 +62,20 @@ public class User implements Identified<Integer> {
         this.password = password;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public String getUpdateTime() {
-        return updateTime;
+    public UserRole getUserRole() {
+        return userRole;
     }
 
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
     public int getStatus() {
@@ -109,29 +110,20 @@ public class User implements Identified<Integer> {
         this.avatar = avatar;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
+                ", userName='" + userName + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", updateTime='" + updateTime + '\'' +
-                ", role=" + role +
+                ", createTime=" + createTime +
+                ", userRole=" + userRole +
                 ", status=" + status +
                 ", age=" + age +
                 ", hobbies='" + hobbies + '\'' +
                 ", avatar=" + avatar +
-                ", name='" + name + '\'' +
                 '}';
     }
 }

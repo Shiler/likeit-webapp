@@ -5,9 +5,9 @@ import org.junit.Before;
 import org.junit.runners.Parameterized;
 import ru.shiler.likeit.database.dao.GenericDao;
 import ru.shiler.likeit.database.dao.Identified;
-import ru.shiler.likeit.database.dao.impl.mysql.DaoFactoryImpl;
 import ru.shiler.likeit.database.exception.PersistException;
-import ru.shiler.likeit.model.User;
+import ru.shiler.likeit.model.question.Question;
+import ru.shiler.likeit.model.user.User;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,12 +28,13 @@ public class MySqlDaoTest extends GenericDaoTest<Connection> {
 
     private GenericDao dao;
 
-    private static final DaoFactoryImpl factory = new DaoFactoryImpl();
+    private static final MySqlDaoFactory factory = new MySqlDaoFactory();
 
     @Parameterized.Parameters
     public static Collection getParameters() {
         return Arrays.asList(new Object[][]{
-                {User.class, new User()}
+                {User.class, new User()},
+                {Question.class, new Question()}
         });
     }
 
@@ -61,3 +62,4 @@ public class MySqlDaoTest extends GenericDaoTest<Connection> {
     }
 
 }
+

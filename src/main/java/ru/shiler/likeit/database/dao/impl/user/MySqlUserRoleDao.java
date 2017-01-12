@@ -1,9 +1,9 @@
-package ru.shiler.likeit.database.dao.impl.mysql;
+package ru.shiler.likeit.database.dao.impl.user;
 
 import ru.shiler.likeit.database.dao.AbstractJDBCDao;
+import ru.shiler.likeit.database.dao.DaoFactory;
 import ru.shiler.likeit.database.exception.PersistException;
-import ru.shiler.likeit.model.User;
-import ru.shiler.likeit.model.UserRole;
+import ru.shiler.likeit.model.user.UserRole;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Evgeny Yushkevich on 23.11.2016.
  */
-public class UserRoleDao extends AbstractJDBCDao<UserRole, Integer> {
+public class MySqlUserRoleDao extends AbstractJDBCDao<UserRole, Integer> {
 
     private class PersistUserRole extends UserRole {
         public void setId(int id) {
@@ -24,33 +24,33 @@ public class UserRoleDao extends AbstractJDBCDao<UserRole, Integer> {
     }
 
 
-    public UserRoleDao(Connection connection) {
-        super(connection);
+    public MySqlUserRoleDao(DaoFactory<Connection> parentFactory, Connection connection) {
+        super(parentFactory, connection);
     }
 
     @Override
     public String getSelectQuery() {
-        return "SELECT `id`, `name` FROM `likeit!`.`user_role` ";
+        return "SELECT `id`, `name` FROM `likeit`.`user_role` ";
     }
 
     @Override
     public String getCreateQuery() {
-        return "INSERT INTO `likeit!`.`user_role` \n" +
-                "(`role_name`) \n" +
+        return "INSERT INTO `likeit`.`user_role` \n" +
+                "(`name`) \n" +
                 "VALUES \n" +
                 "(?)";
     }
 
     @Override
     public String getUpdateQuery() {
-        return "UPDATE `likeit!`.`user_role` \n" +
-                "SET `role_name` = ? \n" +
-                "WHERE `role_id` = ?;";
+        return "UPDATE `likeit`.`user_role` \n" +
+                "SET `name` = ? \n" +
+                "WHERE `id` = ?;";
     }
 
     @Override
     public String getDeleteQuery() {
-        return "DELETE FROM `likeit!`.`user_role` WHERE `id` = ?";
+        return "DELETE FROM `likeit`.`user_role` WHERE `id` = ?";
     }
 
     @Override
@@ -78,7 +78,8 @@ public class UserRoleDao extends AbstractJDBCDao<UserRole, Integer> {
         try {
             while (resultSet.next()) {
                 PersistUserRole userRole = new PersistUserRole();
-                userRole.setName(resultSet.getString("role_name"));
+                userRole.setId(resultSet.getInt("id"));
+                userRole.setName(resultSet.getString("name"));
                 result.add(userRole);
             }
         } catch (Exception e) {
