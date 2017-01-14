@@ -31,9 +31,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: javax.servlet:jstl:1.2" level="project" />
     <orderEntry type="library" name="Gradle: mysql:mysql-connector-java:6.0.5" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.5" level="project" />
+    <orderEntry type="library" name="Gradle: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="Gradle: javax.servlet.jsp:javax.servlet.jsp-api:2.3.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: javax.servlet:servlet-api:2.5" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: javax.servlet:jstl:1.1.2" level="project" />
   </component>
 </module>

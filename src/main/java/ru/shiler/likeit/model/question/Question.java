@@ -17,9 +17,26 @@ public class Question implements Identified<Integer> {
     private int status;
     private String title;
     private String content;
-    private Date createTime;
+    private Timestamp createTime;
     private Timestamp updateTime;
+    private double rating;
+    private int answerAmount;
 
+    public int getAnswerAmount() {
+        return answerAmount;
+    }
+
+    public void setAnswerAmount(int answerAmount) {
+        this.answerAmount = answerAmount;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
 
     @Override
     public Integer getId() {
@@ -70,11 +87,11 @@ public class Question implements Identified<Integer> {
         this.content = content;
     }
 
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 

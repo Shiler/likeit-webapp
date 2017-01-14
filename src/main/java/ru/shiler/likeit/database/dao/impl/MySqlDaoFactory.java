@@ -2,11 +2,13 @@ package ru.shiler.likeit.database.dao.impl;
 
 import ru.shiler.likeit.database.dao.DaoFactory;
 import ru.shiler.likeit.database.dao.GenericDao;
+import ru.shiler.likeit.database.dao.impl.answer.MySqlAnswerDao;
 import ru.shiler.likeit.database.dao.impl.question.MySqlQuestionDao;
 import ru.shiler.likeit.database.dao.impl.question.MySqlQuestionTypeDao;
 import ru.shiler.likeit.database.dao.impl.user.MySqlUserDao;
 import ru.shiler.likeit.database.dao.impl.user.MySqlUserRoleDao;
 import ru.shiler.likeit.database.exception.PersistException;
+import ru.shiler.likeit.model.answer.Answer;
 import ru.shiler.likeit.model.question.Question;
 import ru.shiler.likeit.model.question.QuestionType;
 import ru.shiler.likeit.model.user.User;
@@ -88,6 +90,12 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
             @Override
             public GenericDao create(Connection connection) {
                 return new MySqlQuestionTypeDao(MySqlDaoFactory.this, connection);
+            }
+        });
+        creators.put(Answer.class, new DaoCreator<Connection>() {
+            @Override
+            public GenericDao create(Connection connection) {
+                return new MySqlAnswerDao(MySqlDaoFactory.this, connection);
             }
         });
     }

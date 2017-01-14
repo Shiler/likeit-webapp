@@ -8,10 +8,8 @@ import ru.shiler.likeit.model.question.Question;
 import ru.shiler.likeit.model.question.QuestionType;
 import ru.shiler.likeit.model.user.User;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +17,8 @@ import java.util.List;
  * Created by Evgeny Yushkevich on 12.01.2017.
  */
 public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
+
+    private Connection connection;
 
     private class PersistQuestion extends Question {
         public void setId(int id) {
@@ -28,13 +28,69 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
 
     public MySqlQuestionDao(DaoFactory<Connection> parentFactory, Connection connection) {
         super(parentFactory, connection);
+        this.connection = connection;
         addRelation(Question.class, "questionType");
         addRelation(Question.class, "creator");
     }
 
+    public List<Question> search(String query) throws PersistException {
+        List<Question> result = new ArrayList<>();
+        String sql = getSelectQuery() + "WHERE `title` LIKE \"%" + query.toLowerCase() + "%\";";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            result = parseResultSet(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for(Question q : result) {
+            q.setAnswerAmount(getAnswerAmount(q.getId()));
+        }
+        return result;
+    }
+
+    private int getAnswerAmount(int id) {
+        String sql = "SELECT count(*) FROM answer where `question_id` = ?;";
+        try {
+            PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public List<Question> getLastQuestions(int amount) throws PersistException {
+        return getLimitOrderBy("create_time", amount, true);
+    }
+
+
+    public List<Question> getMostRatedQuestions(int amount) throws PersistException {
+        return getLimitOrderBy("rating", amount, false);
+    }
+
+    public boolean isUserRated(int userId, int questionId) throws PersistException {
+        String sql = "SELECT `rated` from `user_rated_question` WHERE user_id = ? AND question_id = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, userId);
+            statement.setInt(2, questionId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+    }
+
     @Override
     public String getSelectQuery() {
-        return "SELECT `id`, `type`, `creator`, `status`, `title`, `content`, `create_time`, `update_time` FROM `likeit`.`question` ";
+        return "SELECT `id`, `type`, `creator`, `status`, `title`, `content`, `create_time`, `update_time`, `rating` FROM `likeit`.`question` ";
     }
 
     @Override
@@ -48,7 +104,7 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
     @Override
     public String getUpdateQuery() {
         return "UPDATE `likeit`.question \n" +
-                "SET `type` = ?, `creator` = ?, `status` = ?, `title` = ?, `content` = ?, `create_time` = ? \n" +
+                "SET `type` = ?, `creator` = ?, `status` = ?, `title` = ?, `content` = ?, `create_time` = ?, `rating` = ? \n" +
                 "WHERE id = ?;";
     }
 
@@ -69,8 +125,9 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
                 question.setStatus(rs.getInt("status"));
                 question.setTitle(rs.getString("title"));
                 question.setContent(rs.getString("content"));
-                question.setCreateTime(rs.getDate("create_time"));
+                question.setCreateTime(rs.getTimestamp("create_time"));
                 question.setUpdateTime(rs.getTimestamp("update_time"));
+                question.setRating(rs.getDouble("rating"));
                 result.add(question);
             }
         } catch (Exception e) {
@@ -81,7 +138,6 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
 
     private void prepareStatement(PreparedStatement statement, Question object) throws PersistException {
         try {
-            Date sqlDate = Utils.convert(object.getCreateTime());
             int type = (object.getQuestionType() == null || object.getQuestionType().getId() == null) ? -1
                     : object.getQuestionType().getId();
             int creator = (object.getCreator() == null || object.getCreator().getId() == null) ? -1
@@ -91,7 +147,8 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
             statement.setInt(3, object.getStatus());
             statement.setString(4, object.getTitle());
             statement.setString(5, object.getContent());
-            statement.setDate(6, sqlDate);
+            statement.setObject(6, object.getCreateTime());
+            statement.setDouble(7, object.getRating());
         } catch (Exception e) {
             throw new PersistException(e);
         }

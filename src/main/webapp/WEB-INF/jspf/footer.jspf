@@ -1,0 +1,17 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Evgeny Yushkevich
+  Date: 12.01.2017
+  Time: 5:05
+  To change this template use File | Settings | File Templates.
+--%>
+
+<footer class="container-fluid text-center">
+    <a href="#top" title="To Top">
+        <span class="glyphicon glyphicon-chevron-up"></span>
+    </a>
+    <p>Copyright <a href="https://vk.com/ishiler" title="2017">2017</a></p>
+</footer>
+
+</body>
+</html>

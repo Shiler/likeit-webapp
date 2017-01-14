@@ -1,5 +1,7 @@
 package ru.shiler.likeit.controller;
 
+import ru.shiler.likeit.command.CommandInvoker;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,9 +13,15 @@ import java.io.IOException;
  */
 public class AppController extends HttpServlet {
 
+    private CommandInvoker invoker;
+
+    public AppController() {
+        invoker = new CommandInvoker();
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("index.jsp").forward(req, resp);
+        invoker.invoke(req, resp);
     }
 
     @Override

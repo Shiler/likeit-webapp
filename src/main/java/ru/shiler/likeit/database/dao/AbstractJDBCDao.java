@@ -89,6 +89,21 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
         return list.iterator().next();
     }
 
+    public List<T> getLimitOrderBy(String orderBy, int limit, boolean ascending) throws PersistException {
+        List<T> result;
+        String asc = ascending ? "ASC" : "DESC";
+        String query = getSelectQuery() + "ORDER BY `" + orderBy + "` " + asc +" LIMIT ?;";
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, limit);
+            ResultSet rs = statement.executeQuery();
+            result = parseResultSet(rs);
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return result;
+    }
+
     @Override
     public List<T> getAll() throws PersistException {
         List<T> list;

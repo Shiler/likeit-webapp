@@ -6,6 +6,7 @@ import org.junit.runners.Parameterized;
 import ru.shiler.likeit.database.dao.GenericDao;
 import ru.shiler.likeit.database.dao.Identified;
 import ru.shiler.likeit.database.exception.PersistException;
+import ru.shiler.likeit.model.answer.Answer;
 import ru.shiler.likeit.model.question.Question;
 import ru.shiler.likeit.model.user.User;
 
@@ -34,7 +35,8 @@ public class MySqlDaoTest extends GenericDaoTest<Connection> {
     public static Collection getParameters() {
         return Arrays.asList(new Object[][]{
                 {User.class, new User()},
-                {Question.class, new Question()}
+                {Question.class, new Question()},
+                {Answer.class, new Answer()}
         });
     }
 

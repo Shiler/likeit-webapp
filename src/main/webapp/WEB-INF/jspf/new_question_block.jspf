@@ -1,0 +1,40 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Evgeny Yushkevich
+  Date: 14.01.2017
+  Time: 5:34
+  To change this template use File | Settings | File Templates.
+--%>
+<div class="container-fluid bg-grey">
+    <div class="row">
+        <div class="col-sm-12">
+            <h4 style="text-align: center;">New question</h4>
+            <form>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="text" class="form-input" placeholder="Question title">
+                    </div>
+                    <div class="col-sm-6">
+                        <select class="form-select">
+                            <option>Category</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <textarea class="form-textarea" rows="4" placeholder="your question text"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <input type="submit" class="form-input" value="Ask question">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

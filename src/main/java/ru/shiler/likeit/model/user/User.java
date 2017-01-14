@@ -2,6 +2,7 @@ package ru.shiler.likeit.model.user;
 
 import ru.shiler.likeit.database.dao.Identified;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -14,12 +15,21 @@ public class User implements Identified<Integer> {
     private String fullName;
     private String email;
     private String password;
-    private Date createTime;
+    private Timestamp createTime;
     private UserRole userRole;
     private int status;
     private int age;
     private String hobbies;
     private int avatar;
+    private int answerAmount;
+
+    public int getAnswerAmount() {
+        return answerAmount;
+    }
+
+    public void setAnswerAmount(int answerAmount) {
+        this.answerAmount = answerAmount;
+    }
 
     @Override
     public Integer getId() {
@@ -62,11 +72,11 @@ public class User implements Identified<Integer> {
         this.password = password;
     }
 
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 
