@@ -18,4 +18,6 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'log4j:log4j:1.2.17'
     compile 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.1'
+    compile 'com.esotericsoftware.yamlbeans:yamlbeans:1.11'
+    compile 'com.google.guava:guava:21.0-rc2'
 }

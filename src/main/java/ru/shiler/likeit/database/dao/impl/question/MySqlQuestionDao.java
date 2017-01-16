@@ -33,6 +33,20 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
         addRelation(Question.class, "creator");
     }
 
+    public List<Question> getByCategoryId(int catId) throws PersistException{
+        List<Question> result = new ArrayList<>();
+        String sql = getSelectQuery() + "WHERE `type` = ?;";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, catId);
+            ResultSet rs = statement.executeQuery();
+            result = parseResultSet(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public List<Question> search(String query) throws PersistException {
         List<Question> result = new ArrayList<>();
         String sql = getSelectQuery() + "WHERE `title` LIKE \"%" + query.toLowerCase() + "%\";";
@@ -42,9 +56,6 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
             result = parseResultSet(rs);
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        for(Question q : result) {
-            q.setAnswerAmount(getAnswerAmount(q.getId()));
         }
         return result;
     }
@@ -127,11 +138,14 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
                 question.setContent(rs.getString("content"));
                 question.setCreateTime(rs.getTimestamp("create_time"));
                 question.setUpdateTime(rs.getTimestamp("update_time"));
-                question.setRating(rs.getDouble("rating"));
+                question.setRating(rs.getInt("rating"));
                 result.add(question);
             }
         } catch (Exception e) {
             throw new PersistException(e);
+        }
+        for(Question q : result) {
+            q.setAnswerAmount(getAnswerAmount(q.getId()));
         }
         return result;
     }
@@ -148,7 +162,7 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
             statement.setString(4, object.getTitle());
             statement.setString(5, object.getContent());
             statement.setObject(6, object.getCreateTime());
-            statement.setDouble(7, object.getRating());
+            statement.setInt(7, object.getRating());
         } catch (Exception e) {
             throw new PersistException(e);
         }

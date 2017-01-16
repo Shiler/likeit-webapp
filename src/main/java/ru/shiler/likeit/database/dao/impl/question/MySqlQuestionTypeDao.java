@@ -30,13 +30,13 @@ public class MySqlQuestionTypeDao extends AbstractJDBCDao<QuestionType, Integer>
 
     @Override
     public String getSelectQuery() {
-        return "SELECT `id`, `name` FROM `likeit`.`question_type` ";
+        return "SELECT `id`, `name`, `name_ru` FROM `likeit`.`question_type` ";
     }
 
     @Override
     public String getCreateQuery() {
         return "INSERT INTO `likeit`.`question_type` \n" +
-                "(`name`) \n" +
+                "(`name`, `name_ru`) \n" +
                 "VALUES \n" +
                 "(?)";
     }
@@ -44,7 +44,7 @@ public class MySqlQuestionTypeDao extends AbstractJDBCDao<QuestionType, Integer>
     @Override
     public String getUpdateQuery() {
         return "UPDATE `likeit`.`question_type` \n" +
-                "SET `name` = ? \n" +
+                "SET `name` = ?, `name_ru` = ? \n" +
                 "WHERE `id` = ?;";
     }
 
@@ -61,6 +61,7 @@ public class MySqlQuestionTypeDao extends AbstractJDBCDao<QuestionType, Integer>
                 PersistQuestionType questionType = new PersistQuestionType();
                 questionType.setId(resultSet.getInt("id"));
                 questionType.setName(resultSet.getString("name"));
+                questionType.setNameRu(resultSet.getString("name_ru"));
                 result.add(questionType);
             }
         } catch (Exception e) {
@@ -72,6 +73,7 @@ public class MySqlQuestionTypeDao extends AbstractJDBCDao<QuestionType, Integer>
     private void prepareForInsertAndUpdate(PreparedStatement statement, QuestionType object) throws PersistException {
         try {
             statement.setString(1, object.getName());
+            statement.setString(2, object.getNameRu());
         } catch (SQLException e) {
             throw new PersistException();
         }

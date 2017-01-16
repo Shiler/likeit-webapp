@@ -54,23 +54,44 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
         return list.iterator().next();
     }
 
+    public User getByEmail(String email) throws PersistException {
+        List<User> list;
+        String sql = getSelectQuery();
+        sql += " WHERE email = ?";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setString(1, email);
+            ResultSet rs = statement.executeQuery();
+            list = parseResultSet(rs);
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        if (list.size() > 1) {
+            throw new PersistException("Received more than one record.");
+        }
+        return list.iterator().next();
+    }
+
     @Override
     public String getSelectQuery() {
-        return "SELECT `id`, `user_name`, `full_name`, `email`, `password`, `create_time`, `user_role`, `status`, `age`, `hobbies`, `avatar`, `answer_amount` FROM `likeit`.`user` ";
+        return "SELECT `id`, `user_name`, `full_name`, `email`, `password`, `create_time`, `user_role`, `status`, `age`, `answer_amount` FROM `likeit`.`user` ";
     }
 
     @Override
     public String getCreateQuery() {
         return "INSERT INTO `likeit`.`user` \n" +
-                "(`user_name`, `full_name`, `email`, `password`, `create_time`, `user_role`, `status`, `age`, `hobbies`, `avatar`, `answer_amount`) \n" +
+                "(`user_name`, `full_name`, `email`, `password`, `create_time`, `user_role`, `status`, `age`, `answer_amount`) \n" +
                 "VALUES \n" +
-                "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?);";
     }
 
     @Override
     public String getUpdateQuery() {
         return "UPDATE `likeit`.user \n" +
-                "SET `user_name` = ?, `full_name` = ?, `email` = ?, `password` = ?, `create_time` = ?, `user_role` = ?, `status` = ?, `age` = ?, `hobbies` = ?, `avatar` = ?, `answer_amount` \n" +
+                "SET `user_name` = ?, `full_name` = ?, `email` = ?, `password` = ?, `create_time` = ?, `user_role` = ?, `status` = ?, `age` = ?, `answer_amount` \n" +
                 "WHERE id = ?;";
     }
 
@@ -94,8 +115,6 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
                 user.setUserRole((UserRole) getDependence(UserRole.class, rs.getInt("user_role")));
                 user.setStatus(rs.getInt("status"));
                 user.setAge(rs.getInt("age"));
-                user.setHobbies(rs.getString("hobbies"));
-                user.setAvatar(rs.getInt("avatar"));
                 user.setAnswerAmount(rs.getInt("answer_amount"));
                 result.add(user);
             }
@@ -122,9 +141,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
             statement.setInt(6, userRole);
             statement.setInt(7, object.getStatus());
             statement.setInt(8, object.getAge());
-            statement.setString(9, object.getHobbies());
-            statement.setInt(10, object.getAvatar());
-            statement.setInt(11, object.getAnswerAmount());
+            statement.setInt(9, object.getAnswerAmount());
         } catch (Exception e) {
             throw new PersistException(e);
         }

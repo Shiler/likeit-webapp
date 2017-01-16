@@ -8,10 +8,8 @@ import ru.shiler.likeit.model.answer.Answer;
 import ru.shiler.likeit.model.question.Question;
 import ru.shiler.likeit.model.user.User;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,6 +49,20 @@ public class MySqlAnswerDao extends AbstractJDBCDao<Answer, Integer> {
         }
     }
 
+    public List<Answer> getByQuestionId(int questionId) throws PersistException {
+        List<Answer> answers = new ArrayList<>();
+        String sql = getSelectQuery() + "WHERE `question_id` = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, questionId);
+            ResultSet rs = statement.executeQuery();
+            return parseResultSet(rs);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+        return answers;
+    }
+
     @Override
     public String getSelectQuery() {
         return "SELECT `id`, `user_id`, `question_id`, `create_time`, `text` FROM `likeit`.`answer` ";
@@ -85,8 +97,9 @@ public class MySqlAnswerDao extends AbstractJDBCDao<Answer, Integer> {
                 answer.setId(rs.getInt("id"));
                 answer.setCreator((User) getDependence(User.class, rs.getInt("user_id")));
                 answer.setQuestion((Question) getDependence(Question.class, rs.getInt("question_id")));
-                answer.setCreateTime(rs.getDate("create_time"));
+                answer.setCreateTime(rs.getTimestamp("create_time"));
                 answer.setText(rs.getString("text"));
+                answer.setRating(getAnswerRating(answer.getId()));
                 result.add(answer);
             }
         } catch (Exception e) {
@@ -107,14 +120,13 @@ public class MySqlAnswerDao extends AbstractJDBCDao<Answer, Integer> {
 
     private void prepareStatement(PreparedStatement statement, Answer object) throws PersistException {
         try {
-            Date sqlDate = Utils.convert(object.getCreateTime());
             int creator = (object.getCreator() == null || object.getCreator().getId() == null) ? -1
                     : object.getCreator().getId();
             int question = (object.getQuestion() == null || object.getQuestion().getId() == null) ? -1
                     : object.getQuestion().getId();
             statement.setInt(1, creator);
             statement.setInt(2, question);
-            statement.setDate(3, sqlDate);
+            statement.setTimestamp(3, object.getCreateTime());
             statement.setString(4, object.getText());
         } catch (Exception e) {
             throw new PersistException(e);

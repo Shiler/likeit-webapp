@@ -4,6 +4,7 @@ import ru.shiler.likeit.database.dao.Identified;
 import ru.shiler.likeit.model.question.Question;
 import ru.shiler.likeit.model.user.User;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -14,9 +15,17 @@ public class Answer implements Identified<Integer> {
     private int id;
     private User creator;
     private Question question;
-    private Date createTime;
+    private Timestamp createTime;
     private String text;
+    private double rating;
 
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
 
     @Override
     public Integer getId() {
@@ -43,11 +52,11 @@ public class Answer implements Identified<Integer> {
         this.question = question;
     }
 
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 

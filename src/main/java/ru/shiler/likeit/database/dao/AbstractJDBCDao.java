@@ -119,11 +119,11 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
 
     @Override
     public T persist(T object) throws PersistException {
-        if (object.getId() != null) {
+        if (object.getId() != null && object.getId() != Integer.valueOf(0)) {
             throw new PersistException("Object is already persist.");
         }
         // Сохраняем зависимости
-        saveDependences(object);
+        //saveDependences(object);
 
         T persistInstance;
         // Добавляем запись

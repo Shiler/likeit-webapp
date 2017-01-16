@@ -1,23 +1,23 @@
 <%--
   Created by IntelliJ IDEA.
   User: Evgeny Yushkevich
-  Date: 14.01.2017
-  Time: 5:32
+  Date: 15.01.2017
+  Time: 17:48
   To change this template use File | Settings | File Templates.
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<fmt:bundle basename="app-strings" prefix="search.">
+<fmt:bundle basename="app-strings" prefix="top.">
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div class="questions-block">
                     <div class="row">
-                        <h4><fmt:message key="found"/>: ${fn:length(searchResult)}</h4>
+                        <h4><fmt:message key="title"/></h4>
                         <table class="table table-striped">
                             <tbody>
-                            <c:forEach items="${searchResult}" var="item">
+                            <c:forEach items="${topQuestions}" var="item">
                                 <tr>
                                     <td>
                                         <a href="/question?id=${item.id}"><h4>${item.title}</h4></a>
@@ -64,7 +64,6 @@
         </div>
     </div>
 </fmt:bundle>
-
 
 <%@include file="/WEB-INF/jspf/new_question_block.jspf" %>
 <%@include file="/WEB-INF/jspf/about_block.jspf" %>

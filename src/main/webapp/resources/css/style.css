@@ -1,3 +1,41 @@
+.go-back {
+    text-align: center;
+}
+
+.registration h3 {
+    text-align: center;
+}
+
+.left-margin {
+    margin-left: 7px;
+    margin-bottom: 5px;
+}
+
+td p {
+    margin-left: 15px;
+}
+
+.small-info {
+    font-size: 15px;
+}
+
+.comment-info {
+    margin-left: 0px;
+}
+
+.question-page p {
+    margin-left: 15px;
+    margin-bottom: 0px;
+}
+
+.question-page h4 {
+    margin-bottom: 0px;
+}
+
+td .glyphicon {
+    font-size: 12px;
+}
+
 .navbar {
     margin-bottom: 0;
     background-color: rgba(0, 0, 0, 0.3);
@@ -149,6 +187,10 @@ footer .glyphicon {
 
 td p {
     margin-left: 15px;
+}
+
+.categories ul {
+    padding-left: 0;
 }
 
 td .glyphicon {

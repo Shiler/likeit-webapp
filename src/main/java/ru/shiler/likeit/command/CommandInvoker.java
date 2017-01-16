@@ -1,8 +1,6 @@
 package ru.shiler.likeit.command;
 
-import org.apache.log4j.Logger;
-import ru.shiler.likeit.command.impl.ShowIndexPageCommand;
-import ru.shiler.likeit.command.impl.SearchCommand;
+import ru.shiler.likeit.command.impl.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,13 +14,21 @@ import java.util.Map;
  */
 public class CommandInvoker {
 
-    private final static Logger logger = Logger.getLogger(CommandInvoker.class);
-
     private Map<String, Command> commandMap = new HashMap<>();
 
     public CommandInvoker() {
-        commandMap.put("/app/index", new ShowIndexPageCommand());
+        commandMap.put("/app/index", new IndexCommand());
         commandMap.put("/app/search", new SearchCommand());
+        commandMap.put("/app/categories", new CategoriesCommand());
+        commandMap.put("/app/top", new TopQuestionsCommand());
+        commandMap.put("/app/question", new QuestionCommand());
+        commandMap.put("/app/setLocale", new SetLocaleCommand());
+        commandMap.put("/app/register", new RegisterPageCommand());
+        commandMap.put("/app/register.do", new RegisterCommand());
+        commandMap.put("/app/logout", new LogoutCommand());
+        commandMap.put("/app/login", new LoginPageCommand());
+        commandMap.put("/app/login.do", new LoginCommand());
+        commandMap.put("/app/question.add", new AddQuestionCommand());
     }
 
     public void invoke(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

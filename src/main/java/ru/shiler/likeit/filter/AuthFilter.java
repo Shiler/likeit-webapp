@@ -1,6 +1,5 @@
 package ru.shiler.likeit.filter;
 
-import org.apache.commons.lang3.StringUtils;
 import ru.shiler.likeit.model.user.User;
 
 import javax.servlet.*;
@@ -16,7 +15,7 @@ import java.util.List;
  */
 public class AuthFilter implements Filter {
 
-    private List<String> pathFilters = Arrays.asList("add", "delete", "buy", "deposit", "profile");
+    private List<String> pathFilters = Arrays.asList(".add", ".edit", ".delete");
 
     public AuthFilter() {
 
@@ -31,21 +30,31 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         String uri = ((HttpServletRequest) request).getRequestURI();
-        String path = StringUtils.substringAfterLast(uri, "/");
 
-        if (!pathFilters.contains(path)) {
-            chain.doFilter(request, response);
-            return;
+        for (String pathFilter : pathFilters) {
+            if (!isProtectedCommand(uri)) {
+                chain.doFilter(request, response);
+                return;
+            }
         }
 
         HttpSession session = ((HttpServletRequest) request).getSession();
-        User user = (User) session.getAttribute("PRINCIPAL");
+        User user = (User) session.getAttribute("USER");
         if (user != null) {
             chain.doFilter(request, response);
             return;
         }
 
         ((HttpServletResponse) response).sendRedirect("/login");
+    }
+
+    private boolean isProtectedCommand(String uri) {
+        for (String pathFilter : pathFilters) {
+            if (uri.contains(pathFilter)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

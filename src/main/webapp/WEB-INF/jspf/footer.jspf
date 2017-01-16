@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: Evgeny Yushkevich
@@ -6,12 +7,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<footer class="container-fluid text-center">
-    <a href="#top" title="To Top">
-        <span class="glyphicon glyphicon-chevron-up"></span>
+<fmt:bundle basename="app-strings" prefix="footer.">
+    <footer class="container-fluid text-center">
+    <a href="#top" title="<fmt:message key="to-the-top"/>">
+    <span class="glyphicon glyphicon-chevron-up"></span>
     </a>
-    <p>Copyright <a href="https://vk.com/ishiler" title="2017">2017</a></p>
-</footer>
+    <p>Copyright <a href="https://vk.com/ishiler" title="2016-2017">2016-2017</a> EPAM</p>
+    </footer>
+</fmt:bundle>
 
 </body>
 </html>

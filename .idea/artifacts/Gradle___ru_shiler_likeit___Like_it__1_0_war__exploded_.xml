@@ -22,6 +22,8 @@
           <element id="library" level="project" name="Gradle: org.apache.commons:commons-lang3:3.5" />
           <element id="library" level="project" name="Gradle: log4j:log4j:1.2.17" />
           <element id="library" level="project" name="Gradle: javax.servlet.jsp:javax.servlet.jsp-api:2.3.1" />
+          <element id="library" level="project" name="Gradle: com.esotericsoftware.yamlbeans:yamlbeans:1.11" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/21.0-rc2/a464c8132fdd56801e42647b9023cd37426dc606/guava-21.0-rc2.jar" />
         </element>
       </element>
     </root>

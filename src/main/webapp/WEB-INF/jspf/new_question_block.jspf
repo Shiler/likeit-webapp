@@ -5,36 +5,45 @@
   Time: 5:34
   To change this template use File | Settings | File Templates.
 --%>
-<div class="container-fluid bg-grey">
-    <div class="row">
-        <div class="col-sm-12">
-            <h4 style="text-align: center;">New question</h4>
-            <form>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <input type="text" class="form-input" placeholder="Question title">
-                    </div>
-                    <div class="col-sm-6">
-                        <select class="form-select">
-                            <option>Category</option>
-                            <option>Female</option>
-                        </select>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <textarea class="form-textarea" rows="4" placeholder="your question text"></textarea>
+<fmt:bundle basename="app-strings" prefix="new-question.">
+    <div class="container-fluid bg-grey">
+        <div class="row">
+            <div class="col-sm-12">
+                <h4 style="text-align: center;"><fmt:message key="title"/></h4>
+                <form method="POST" action="/question.add">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="text" name="title" class="form-input" placeholder="<fmt:message key="placeholder"/>">
+                        </div>
+                        <div class="col-sm-6">
+                            <select name="category" class="form-select">
+                                <option><fmt:message key="category"/></option>
+                                <option><fmt:message key="tech"/></option>
+                                <option><fmt:message key="art"/></option>
+                                <option><fmt:message key="health"/></option>
+                                <option><fmt:message key="programming"/></option>
+                                <option><fmt:message key="religion"/></option>
+                                <option><fmt:message key="science"/></option>
+                                <option><fmt:message key="politics"/></option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <input type="submit" class="form-input" value="Ask question">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <textarea name="content" class="form-textarea" rows="4" placeholder="<fmt:message key="textarea"/>"></textarea>
+                        </div>
                     </div>
-                </div>
 
-            </form>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="submit" class="form-input" value="<fmt:message key="ask"/>">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
         </div>
     </div>
-</div>
+</fmt:bundle>

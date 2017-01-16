@@ -5,27 +5,27 @@
   Time: 5:35
   To change this template use File | Settings | File Templates.
 --%>
-
-
-<div class="container-fluid text-center">
-    <h2>What is this?</h2>
-    <h4>It's a EPAM training web app created by Evgeny Yushkevich</h4>
-    <br>
-    <div class="row">
-        <div class="col-sm-4">
-            <span class="glyphicon glyphicon-off logo-small"></span>
-            <h4>JAVA EE</h4>
-            <p>Powerful web technology</p>
-        </div>
-        <div class="col-sm-4">
-            <span class="glyphicon glyphicon-wrench logo-small"></span>
-            <h4>Apache Tomcat 7.0</h4>
-            <p>Servlet container & web server</p>
-        </div>
-        <div class="col-sm-4">
-            <span class="glyphicon glyphicon-lock logo-small"></span>
-            <h4>Siimple</h4>
-            <p>CSS framework based on Bootstrap</p>
+<fmt:bundle basename="app-strings" prefix="about.">
+    <div class="container-fluid text-center">
+        <h2><fmt:message key="what-is"/></h2>
+        <h4><fmt:message key="text"/></h4>
+        <br>
+        <div class="row">
+            <div class="col-sm-4">
+                <span class="glyphicon glyphicon-off logo-small"></span>
+                <h4><fmt:message key="javaee"/></h4>
+                <p></p>
+            </div>
+            <div class="col-sm-4">
+                <span class="glyphicon glyphicon-wrench logo-small"></span>
+                <h4>Apache Tomcat 7.0</h4>
+                <p><fmt:message key="tomcat"/></p>
+            </div>
+            <div class="col-sm-4">
+                <span class="glyphicon glyphicon-lock logo-small"></span>
+                <h4>Siimple</h4>
+                <p><fmt:message key="siimple"/></p>
+            </div>
         </div>
     </div>
-</div>
+</fmt:bundle>

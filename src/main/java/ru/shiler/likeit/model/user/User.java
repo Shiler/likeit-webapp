@@ -19,8 +19,6 @@ public class User implements Identified<Integer> {
     private UserRole userRole;
     private int status;
     private int age;
-    private String hobbies;
-    private int avatar;
     private int answerAmount;
 
     public int getAnswerAmount() {
@@ -104,22 +102,6 @@ public class User implements Identified<Integer> {
         this.age = age;
     }
 
-    public String getHobbies() {
-        return hobbies;
-    }
-
-    public void setHobbies(String hobbies) {
-        this.hobbies = hobbies;
-    }
-
-    public int getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(int avatar) {
-        this.avatar = avatar;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -132,8 +114,6 @@ public class User implements Identified<Integer> {
                 ", userRole=" + userRole +
                 ", status=" + status +
                 ", age=" + age +
-                ", hobbies='" + hobbies + '\'' +
-                ", avatar=" + avatar +
                 '}';
     }
 }

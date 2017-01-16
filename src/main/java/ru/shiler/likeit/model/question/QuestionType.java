@@ -9,6 +9,15 @@ public class QuestionType implements Identified<Integer> {
 
     private int id;
     private String name;
+    private String nameRu;
+
+    public String getNameRu() {
+        return nameRu;
+    }
+
+    public void setNameRu(String nameRu) {
+        this.nameRu = nameRu;
+    }
 
     @Override
     public Integer getId() {

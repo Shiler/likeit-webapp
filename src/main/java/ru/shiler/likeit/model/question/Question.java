@@ -19,7 +19,7 @@ public class Question implements Identified<Integer> {
     private String content;
     private Timestamp createTime;
     private Timestamp updateTime;
-    private double rating;
+    private int rating;
     private int answerAmount;
 
     public int getAnswerAmount() {
@@ -30,11 +30,11 @@ public class Question implements Identified<Integer> {
         this.answerAmount = answerAmount;
     }
 
-    public double getRating() {
+    public int getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(int rating) {
         this.rating = rating;
     }
 
