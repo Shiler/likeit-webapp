@@ -19,18 +19,25 @@
                             <tbody>
                             <c:forEach items="${topQuestions}" var="item">
                                 <tr>
-                                    <td>
+                                    <td class="col-sm-9">
                                         <a href="/question?id=${item.id}"><h4>${item.title}</h4></a>
                                         <p>${item.content}</p>
                                     </td>
-                                    <td>
+                                    <td class="col-sm-2">
                                         <fmt:message key="by"/> <a href="/user?id=${item.creator.id}">${item.creator.fullName}</a>
                                         <br>
-                                        <div class="glyphicon glyphicon-edit"></div>
-                                        <yo:timestampFormat timestamp="${item.createTime}"/>
-                                        <br>
                                         <div class="glyphicon glyphicon-comment"></div>
-                                            ${item.answerAmount}
+                                        <fmt:message key="answer-amount"/>: ${item.answerAmount}
+                                        <br>
+                                        <div class="glyphicon glyphicon-heart"></div>
+                                        <c:choose>
+                                            <c:when test="${item.rating>=0}">
+                                                <span style="color: #27ae60"><fmt:message key="rating"/>: ${item.rating}</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span style="color: #c0392b"><fmt:message key="rating"/>: ${item.rating}</span>
+                                            </c:otherwise>
+                                        </c:choose>
                                         <br>
                                         <div class="glyphicon glyphicon-list"></div>
                                         <c:choose>
@@ -42,15 +49,8 @@
                                             </c:otherwise>
                                         </c:choose>
                                         <br>
-                                        <div class="glyphicon glyphicon-heart"></div>
-                                        <c:choose>
-                                            <c:when test="${item.rating>=0}">
-                                                <span style="color: #27ae60">${item.rating}</span>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <span style="color: #c0392b">${item.rating}</span>
-                                            </c:otherwise>
-                                        </c:choose>
+                                        <div class="glyphicon glyphicon-edit"></div>
+                                        <yo:timestampFormat timestamp="${item.createTime}" locale="${sessionScope.locale}"/>
                                     </td>
                                 </tr>
                             </c:forEach>

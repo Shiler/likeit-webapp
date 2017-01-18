@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource name="jdbc/likeit" auth="Container"
+              type="javax.sql.DataSource" maxActive="100"
+              maxIdle="30" maxWait="10000"
+              autoReconnect="true"
+              removeAbandoned="true"
+              removeAbandonedTimeout="30"
+              logAbandoned="true"
+              username="root"
+              password="root"
+              useSSL="true"
+              serverSslCert="classpath:server.crt"
+
+              driverClassName="com.mysql.cj.jdbc.Driver"
+
+              url="jdbc:mysql://localhost:3306/likeit"
+              connectionProperties="serverTimezone=Europe/Moscow;useUnicode=true;characterEncoding=utf8;useLegacyDatetimeCode=false;useSSL=true;serverSslCert=classpath:server.crt;"/>
+</Context>

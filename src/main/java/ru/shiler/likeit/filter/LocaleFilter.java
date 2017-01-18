@@ -1,5 +1,7 @@
 package ru.shiler.likeit.filter;
 
+import ru.shiler.likeit.model.user.User;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,10 +27,12 @@ public class LocaleFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpSession session = ((HttpServletRequest) request).getSession();
         String locale = (String) session.getAttribute("locale");
-        if (locale == null) {
+        User user = (User) session.getAttribute("USER");
+        if (locale == null || !supportedLocales.contains(locale)) {
             session.setAttribute("locale", defaultLocale);
-        } else if (!supportedLocales.contains(locale)) {
-            session.setAttribute("locale", defaultLocale);
+            if (user != null) user.setLocale(defaultLocale);
+        } else if (user != null) {
+            session.setAttribute("locale", user.getLocale());
         }
         chain.doFilter(request, response);
     }

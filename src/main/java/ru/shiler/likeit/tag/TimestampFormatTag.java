@@ -6,6 +6,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Created by Evgeny Yushkevich on 14.01.2017.
@@ -13,9 +14,14 @@ import java.text.SimpleDateFormat;
 public class TimestampFormatTag extends SimpleTagSupport {
 
     private Timestamp timestamp;
+    private String locale;
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
     @Override
@@ -25,7 +31,7 @@ public class TimestampFormatTag extends SimpleTagSupport {
     }
 
     private String formatTimestamp(Timestamp timestamp) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd.MM");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd MMM yyyy", new Locale(locale));
         return dateFormat.format(timestamp);
     }
 }

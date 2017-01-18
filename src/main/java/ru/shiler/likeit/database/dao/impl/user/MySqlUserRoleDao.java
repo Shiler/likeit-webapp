@@ -61,7 +61,7 @@ public class MySqlUserRoleDao extends AbstractJDBCDao<UserRole, Integer> {
     // insert and update are the same
     private void prepareForInsertAndUpdate(PreparedStatement statement, UserRole object) throws PersistException {
         try {
-            statement.setString(1, object.getName());
+            statement.setString(0, object.getName());
         } catch (SQLException e) {
             throw new PersistException();
         }

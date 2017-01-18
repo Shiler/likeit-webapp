@@ -52,6 +52,7 @@
         <div class="row">
             <div class="col-sm-4 col-sm-offset-4">
                 <div class="registration">
+                    <%@include file="/WEB-INF/jspf/enable_js.jspf"%>
                     <h3><fmt:message key="login"/></h3>
                     <form class="form-auto" action="/login.do" method="POST">
                         <p class="left-margin"><fmt:message key="username"/></p>

@@ -53,6 +53,33 @@ public class MySqlQuestionTypeDao extends AbstractJDBCDao<QuestionType, Integer>
         return "DELETE FROM `likeit`.`question_type` WHERE `id` = ?";
     }
 
+    public boolean isExists(String categoryName) throws PersistException {
+        String sql = getSelectQuery() + "WHERE `name` = ? or `name_ru` = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setString(1, categoryName);
+            statement.setString(2, categoryName);
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new PersistException();
+        }
+    }
+
+    public QuestionType getByName(String categoryName) throws PersistException {
+        String sql = getSelectQuery() + "WHERE `name` = ? or `name_ru` = ?;";
+        PreparedStatement statement;
+        try {
+            statement = getConnection().prepareStatement(sql);
+            statement.setString(1, categoryName);
+            statement.setString(2, categoryName);
+            ResultSet resultSet = statement.executeQuery();
+            return parseResultSet(resultSet).get(0);
+        } catch (SQLException e) {
+            throw new PersistException();
+        }
+    }
+
     @Override
     protected List<QuestionType> parseResultSet(ResultSet resultSet) throws PersistException {
         List<QuestionType> result = new LinkedList<>();
@@ -70,7 +97,8 @@ public class MySqlQuestionTypeDao extends AbstractJDBCDao<QuestionType, Integer>
         return result;
     }
 
-    private void prepareForInsertAndUpdate(PreparedStatement statement, QuestionType object) throws PersistException {
+    @Override
+    protected void prepareStatementForInsert(PreparedStatement statement, QuestionType object) throws PersistException {
         try {
             statement.setString(1, object.getName());
             statement.setString(2, object.getNameRu());
@@ -80,13 +108,14 @@ public class MySqlQuestionTypeDao extends AbstractJDBCDao<QuestionType, Integer>
     }
 
     @Override
-    protected void prepareStatementForInsert(PreparedStatement statement, QuestionType object) throws PersistException {
-        prepareForInsertAndUpdate(statement, object);
-    }
-
-    @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, QuestionType object) throws PersistException {
-        prepareForInsertAndUpdate(statement, object);
+        try {
+            statement.setString(1, object.getName());
+            statement.setString(2, object.getNameRu());
+            statement.setInt(3, object.getId());
+        } catch (SQLException e) {
+            throw new PersistException();
+        }
     }
 
 }

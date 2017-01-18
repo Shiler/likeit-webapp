@@ -38,7 +38,7 @@
                     </a>
                      or
                     <a href="/login">
-                        <fmt:message key="back"/>
+                        <fmt:message key="to-login"/>
                         <div class="glyphicon glyphicon-chevron-right"></div>
                     </a>
                 </div>
@@ -58,7 +58,7 @@
                         <input type="text" pattern="[a-zA-Z0-9]{6,30}" name="username" required class="form-input"
                                placeholder="user123">
                         <p class="left-margin"><fmt:message key="full-name"/></p>
-                        <input type="text" pattern="[a-zA-Zа-яА-Я\s]{6,30}" name="fullName" required class="form-input"
+                            <input type="text" pattern="[a-zA-Zа-яА-Я0-9\s]{6,30}" name="fullName" required class="form-input"
                                placeholder="Ivan Ivanov">
                         <p class="left-margin"><fmt:message key="age"/></p>
                         <input type="text" pattern="[0-9]{1,3}" name="age" required class="form-input" placeholder="20">

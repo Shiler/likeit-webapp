@@ -7,10 +7,8 @@ import ru.shiler.likeit.database.exception.PersistException;
 import ru.shiler.likeit.model.user.User;
 import ru.shiler.likeit.model.user.UserRole;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +26,51 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
     public MySqlUserDao(DaoFactory<Connection> parentFactory, Connection connection) {
         super(parentFactory, connection);
         addRelation(User.class, "userRole");
+    }
+
+    public int getTotalRating(int userId) throws PersistException {
+        String sql = "SELECT SUM(`rate`) AS 'total' FROM  `answer_rating` INNER JOIN `answer` ON `answer_id` = `id` WHERE `answer`.`user_id` = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("total");
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            throw new PersistException();
+        }
+    }
+
+    public List<User> getTopUsers(int limit) throws PersistException {
+        List<User> userList = new ArrayList<>();
+        int[] users = new int[limit];
+        int[] rates = new int[limit];
+        int size = limit;
+        String sql = "SELECT a.`user_id`, SUM(r.`rate`) AS 'total_rating' FROM (`answer_rating` r INNER JOIN `answer` a ON `answer_id` = `id`) GROUP BY a.`user_id` ORDER BY `total_rating` DESC LIMIT ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, limit);
+            ResultSet resultSet = statement.executeQuery();
+            int index = 0;
+            while(resultSet.next()) {
+                users[index] = resultSet.getInt("user_id");
+                rates[index] = resultSet.getInt("total_rating");
+                index++;
+            }
+            if (index < limit) size = index;
+
+            for (int i = 0; i < size; i++) {
+                User user = getByPK(users[i]);
+                user.setTotalRating(rates[i]);
+                userList.add(user);
+            }
+            return userList;
+        } catch (SQLException e) {
+            throw new PersistException();
+        }
     }
 
     public List<User> getMostAnsweringUsers(int limit) throws PersistException {
@@ -77,21 +120,21 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT `id`, `user_name`, `full_name`, `email`, `password`, `create_time`, `user_role`, `status`, `age`, `answer_amount` FROM `likeit`.`user` ";
+        return "SELECT `id`, `user_name`, `full_name`, `email`, `password`, `create_time`, `user_role`, `status`, `age`, `answer_amount`, `locale` FROM `likeit`.`user` ";
     }
 
     @Override
     public String getCreateQuery() {
         return "INSERT INTO `likeit`.`user` \n" +
-                "(`user_name`, `full_name`, `email`, `password`, `create_time`, `user_role`, `status`, `age`, `answer_amount`) \n" +
+                "(`user_name`, `full_name`, `email`, `password`, `create_time`, `user_role`, `status`, `age`, `answer_amount`, `locale`) \n" +
                 "VALUES \n" +
-                "(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     }
 
     @Override
     public String getUpdateQuery() {
         return "UPDATE `likeit`.user \n" +
-                "SET `user_name` = ?, `full_name` = ?, `email` = ?, `password` = ?, `create_time` = ?, `user_role` = ?, `status` = ?, `age` = ?, `answer_amount` \n" +
+                "SET `user_name` = ?, `full_name` = ?, `email` = ?, `password` = ?, `create_time` = ?, `user_role` = ?, `status` = ?, `age` = ?, `answer_amount` = ?, `locale` = ? \n" +
                 "WHERE id = ?;";
     }
 
@@ -116,6 +159,8 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
                 user.setStatus(rs.getInt("status"));
                 user.setAge(rs.getInt("age"));
                 user.setAnswerAmount(rs.getInt("answer_amount"));
+                user.setLocale(rs.getString("locale"));
+                user.setTotalRating(getTotalRating(user.getId()));
                 result.add(user);
             }
         } catch (Exception e) {
@@ -126,10 +171,6 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, User object) throws PersistException {
-        prepareStatement(statement, object);
-    }
-
-    protected void prepareStatement(PreparedStatement statement, User object) throws PersistException {
         try {
             int userRole = (object.getUserRole() == null || object.getUserRole().getId() == null) ? -1
                     : object.getUserRole().getId();
@@ -142,6 +183,8 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
             statement.setInt(7, object.getStatus());
             statement.setInt(8, object.getAge());
             statement.setInt(9, object.getAnswerAmount());
+            statement.setString(10, object.getLocale());
+            statement.setInt(11, object.getId());
         } catch (Exception e) {
             throw new PersistException(e);
         }
@@ -149,7 +192,22 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
 
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, User object) throws PersistException {
-        prepareStatement(statement, object);
+        try {
+            int userRole = (object.getUserRole() == null || object.getUserRole().getId() == null) ? -1
+                    : object.getUserRole().getId();
+            statement.setString(1, object.getUserName());
+            statement.setString(2, object.getFullName());
+            statement.setString(3, object.getEmail());
+            statement.setString(4, object.getPassword());
+            statement.setTimestamp(5, object.getCreateTime());
+            statement.setInt(6, userRole);
+            statement.setInt(7, object.getStatus());
+            statement.setInt(8, object.getAge());
+            statement.setInt(9, object.getAnswerAmount());
+            statement.setString(10, object.getLocale());
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
     }
 
 }

@@ -19,6 +19,11 @@
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <name>locale</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
     <tag>
@@ -30,4 +35,11 @@
             <required>true</required>
         </attribute>
     </tag>
+
+    <tag>
+        <name>cutSurname</name>
+        <tag-class>ru.shiler.likeit.tag.CutSurnameTag</tag-class>
+        <body-content>JSP</body-content>
+    </tag>
+
 </taglib>

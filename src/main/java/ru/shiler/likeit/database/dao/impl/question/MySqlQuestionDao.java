@@ -74,7 +74,7 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
     }
 
     public List<Question> getLastQuestions(int amount) throws PersistException {
-        return getLimitOrderBy("create_time", amount, true);
+        return getLimitOrderBy("create_time", amount, false);
     }
 
 
@@ -107,9 +107,9 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
     @Override
     public String getCreateQuery() {
         return "INSERT INTO `likeit`.`question` \n" +
-                "(`type`, `creator`, `status`, `title`, `content`, `create_time`) \n" +
+                "(`type`, `creator`, `status`, `title`, `content`, `create_time`, `rating`) \n" +
                 "VALUES \n" +
-                "(?, ?, ?, ?, ?, ?);";
+                "(?, ?, ?, ?, ?, ?, ?);";
     }
 
     @Override
@@ -150,7 +150,28 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
         return result;
     }
 
-    private void prepareStatement(PreparedStatement statement, Question object) throws PersistException {
+    @Override
+    protected void prepareStatementForUpdate(PreparedStatement statement, Question object) throws PersistException {
+        try {
+            int type = (object.getQuestionType() == null || object.getQuestionType().getId() == null) ? -1
+                    : object.getQuestionType().getId();
+            int creator = (object.getCreator() == null || object.getCreator().getId() == null) ? -1
+                    : object.getCreator().getId();
+            statement.setInt(1, type);
+            statement.setInt(2, creator);
+            statement.setInt(3, object.getStatus());
+            statement.setString(4, object.getTitle());
+            statement.setString(5, object.getContent());
+            statement.setObject(6, object.getCreateTime());
+            statement.setInt(7, object.getRating());
+            statement.setInt(8, object.getId());
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+    }
+
+    @Override
+    protected void prepareStatementForInsert(PreparedStatement statement, Question object) throws PersistException {
         try {
             int type = (object.getQuestionType() == null || object.getQuestionType().getId() == null) ? -1
                     : object.getQuestionType().getId();
@@ -166,16 +187,6 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
         } catch (Exception e) {
             throw new PersistException(e);
         }
-    }
-
-    @Override
-    protected void prepareStatementForUpdate(PreparedStatement statement, Question object) throws PersistException {
-        prepareStatement(statement, object);
-    }
-
-    @Override
-    protected void prepareStatementForInsert(PreparedStatement statement, Question object) throws PersistException {
-        prepareStatement(statement, object);
     }
 
 }

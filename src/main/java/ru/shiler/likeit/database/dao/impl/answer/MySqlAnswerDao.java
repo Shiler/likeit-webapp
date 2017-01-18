@@ -34,7 +34,7 @@ public class MySqlAnswerDao extends AbstractJDBCDao<Answer, Integer> {
     }
 
     public double getAnswerRating(int answerId) throws PersistException {
-        String sql = "SELECT AVG(`rate`) FROM `answer_raiting` WHERE `answer_id` = ?;";
+        String sql = "SELECT AVG(`rate`) FROM `answer_rating` WHERE `answer_id` = ?;";
         try {
             PreparedStatement statement = getConnection().prepareStatement(sql);
             statement.setInt(1, answerId);

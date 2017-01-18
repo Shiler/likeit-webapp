@@ -20,20 +20,20 @@
 
                             <hr>
                             <p>${question.content}</p>
-                            <p class="small-info" style="margin-bottom: 30px;"><i><fmt:message key="created"/>: <yo:timestampFormat timestamp="${question.createTime}"/></i></p>
+                            <p class="small-info" style="margin-bottom: 30px;"><i><fmt:message key="created"/>: <yo:timestampFormat timestamp="${question.createTime}" locale="${sessionScope.locale}"/></i></p>
                             <h4 style="margin-bottom: 20px;"><fmt:message key="answers"/>: ${fn:length(answers)}</h4>
                             <table class="table table-striped">
                                 <tbody>
                                 <c:forEach items="${answers}" var="item">
                                     <tr>
-                                        <td>
+                                        <td class="col-sm-2">
                                             <a href="/profile?id=${item.creator.id}"><p>${item.creator.fullName}</p></a>
                                         </td>
-                                        <td>
+                                        <td class="col-sm-9">
                                             <p>${item.text}</p>
                                             <hr>
                                             <p><fmt:message key="rating"/>: ${item.rating}</p>
-                                            <p>at <yo:timestampFormat timestamp="${item.createTime}"/></p>
+                                            <p>at <yo:timestampFormat timestamp="${item.createTime}" locale="${sessionScope.locale}"/></p>
                                         </td>
                                     </tr>
                                 </c:forEach>

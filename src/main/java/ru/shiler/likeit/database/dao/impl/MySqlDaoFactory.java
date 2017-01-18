@@ -32,6 +32,7 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
     private String driver = "com.mysql.cj.jdbc.Driver";
     private Map<Class, DaoCreator> creators;
 
+    @Deprecated
     public Connection getContext() throws PersistException {
         Connection connection;
         try {

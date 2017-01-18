@@ -39,6 +39,7 @@ public class MySqlUserDaoTest {
         user.setFullName("sdadsa");
         user.setAge(Integer.parseInt("123"));
         user.setPassword(Sha256.encrypt("dsadadadada"));
+        user.setLocale("en");
         UserRole userRole = new UserRole();
         userRole.setId(1);
         user.setUserRole(userRole);
@@ -46,6 +47,8 @@ public class MySqlUserDaoTest {
         user.setCreateTime(new Timestamp(new Date().getTime()));
         userDao.persist(user);
         System.out.println(userDao.getByUserName("sddadadad"));
+        user.setLocale("ru");
+        userDao.update(user);
     }
 
 }

@@ -11,14 +11,15 @@
         <div class="row">
             <div class="col-sm-12">
                 <h4 style="text-align: center;"><fmt:message key="title"/></h4>
-                <form method="POST" action="/question.add">
+                <form method="POST" action="/question.add" accept-charset="UTF-8">
                     <div class="row">
                         <div class="col-sm-6">
-                            <input type="text" name="title" class="form-input" placeholder="<fmt:message key="placeholder"/>">
+                            <input type="text" pattern="(.){10,}" title="<fmt:message key="title-length"/>" required
+                                   name="title" class="form-input" placeholder="<fmt:message key="placeholder"/>">
                         </div>
                         <div class="col-sm-6">
-                            <select name="category" class="form-select">
-                                <option><fmt:message key="category"/></option>
+                            <select name="category" required class="form-select">
+                                <option disabled selected value><fmt:message key="category"/></option>
                                 <option><fmt:message key="tech"/></option>
                                 <option><fmt:message key="art"/></option>
                                 <option><fmt:message key="health"/></option>
@@ -32,13 +33,14 @@
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <textarea name="content" class="form-textarea" rows="4" placeholder="<fmt:message key="textarea"/>"></textarea>
+                            <textarea class="form-textarea" minlength="10" required id="questionContent" name="content"
+                                      rows="4" placeholder="<fmt:message key="textarea"/>"></textarea></textarea>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <input type="submit" class="form-input" value="<fmt:message key="ask"/>">
+                            <input type="submit" class="form-input" name="submit" value="<fmt:message key="ask"/>">
                         </div>
                     </div>
 

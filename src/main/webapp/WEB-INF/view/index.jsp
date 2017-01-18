@@ -9,43 +9,21 @@
 <fmt:bundle basename="app-strings" prefix="index.">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-2" style="padding-right: 0;">
                 <div class="top-users">
-                    <h4><span class="glyphicon glyphicon-heart glyph-category"></span> <fmt:message key="top-users"/></h4>
-                    <div class="top-user row">
-                        <img src="resources/img/avatar1.jpg" class="img-circle" alt="avatar1" align="left">
-                        <span>Alina Stashuk</span>
-                        <br>
-                        <span class="top-user-rate"><fmt:message key="rating"/>: 984</span>
-                    </div>
-                    <br>
-                    <div class="top-user row">
-                        <img src="resources/img/avatar2.jpg" class="img-circle" alt="avatar2" align="left">
-                        <span>Mike Krasniy</span>
-                        <br>
-                        <span class="top-user-rate">Raiting: 431</span>
-                    </div>
-                    <br>
-                    <div class="top-user row">
-                        <img src="resources/img/avatar3.jpg" class="img-circle" alt="avatar3" align="left">
-                        <span>Nikita Glytov</span>
-                        <br>
-                        <span class="top-user-rate">Raiting: 289</span>
-                    </div>
-                    <br>
-                    <div class="top-user row">
-                        <img src="resources/img/avatar4.jpg" class="img-circle" alt="avatar4" align="left">
-                        <span>Andrey Kolba</span>
-                        <br>
-                        <span class="top-user-rate">Raiting: 144</span>
-                    </div>
-                    <br>
-                    <div class="top-user row">
-                        <img src="resources/img/avatar5.jpg" class="img-circle" alt="avatar5" align="left">
-                        <span>Artemy Geist</span>
-                        <br>
-                        <span class="top-user-rate">Raiting: 45</span>
-                    </div>
+                    <h4><span class="glyphicon glyphicon-heart glyph-category"></span> <fmt:message key="top-users"/>
+                    </h4>
+                    <c:set var="counter" value="0" scope="page"/>
+                    <c:forEach items="${topUsers}" var="user">
+                        <div class="top-user row">
+                            <img src="resources/img/medal/medal${counter+1}.png" class="img-circle" alt="avatar1"
+                                 align="left">
+                            <span><a class="link" href="/profile?id=${user.id}"><yo:cutSurname>${user.fullName}</yo:cutSurname></a></span>
+                            <br>
+                            <span class="top-user-rate"><fmt:message key="rating"/>: ${user.totalRating}</span>
+                        </div>
+                        <c:set var="counter" value="${counter + 1}" scope="page"/>
+                    </c:forEach>
                 </div>
             </div>
 
@@ -57,7 +35,7 @@
                             <tbody>
                             <c:forEach var="item" items="${lastQuestions}">
                                 <tr>
-                                    <td><yo:timestampFormat timestamp="${item.createTime}"/></td>
+                                    <td><yo:timestampFormat timestamp="${item.createTime}" locale="${sessionScope.locale}"/></td>
                                     <td><a href="/question?id=${item.id}"><yo:cut
                                             symbols="40">${item.title}</yo:cut></a>
                                     </td>
@@ -73,12 +51,15 @@
             </div>
 
             <div class="col-sm-2">
-                <h4><span class="glyphicon glyphicon-signal glyph-category"></span> <fmt:message key="top-questions"/></h4>
+                <h4><span class="glyphicon glyphicon-signal glyph-category"></span> <fmt:message key="top-questions"/>
+                </h4>
                 <div class="top-questions">
-                    <ul>
+                    <ul style="padding-left: 5px;">
                         <c:forEach var="item" items="${mostRatedQuestions}">
-                            <li type="square"><a href="/question?id=${item.id}"><yo:cut
-                                    symbols="15">${item.title}</yo:cut></a></li>
+                            <li type="square"><a class="link" href="/question?id=${item.id}" style="font-size: 12px;"><yo:cut
+                                    symbols="40">${item.title}</yo:cut>
+                            </a> <span style="font-size: 10px;"><div class="glyphicon glyphicon-star"></div>
+                                    ${item.rating}</span></li>
                         </c:forEach>
                     </ul>
                 </div>

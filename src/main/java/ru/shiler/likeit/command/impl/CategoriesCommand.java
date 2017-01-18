@@ -1,7 +1,9 @@
 package ru.shiler.likeit.command.impl;
 
+import org.apache.log4j.Logger;
 import ru.shiler.likeit.command.Command;
 import ru.shiler.likeit.constants.CommandPath;
+import ru.shiler.likeit.database.ConnectionPool;
 import ru.shiler.likeit.database.dao.DaoFactory;
 import ru.shiler.likeit.database.dao.impl.MySqlDaoFactory;
 import ru.shiler.likeit.database.dao.impl.question.MySqlQuestionDao;
@@ -14,6 +16,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +26,8 @@ import java.util.List;
  */
 public class CategoriesCommand implements Command {
 
+    private final static Logger logger = Logger.getLogger(CategoriesCommand.class);
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
@@ -29,17 +35,26 @@ public class CategoriesCommand implements Command {
         MySqlQuestionTypeDao questionTypeDao = null;
         MySqlQuestionDao questionDao = null;
         List<QuestionType> categories = new ArrayList<>();
+        Connection connection = ConnectionPool.getConnection();
+
+        if (connection == null) {
+            request.getRequestDispatcher(CommandPath.ERROR).forward(request, response);
+            return;
+        }
+
         try {
-            questionTypeDao = (MySqlQuestionTypeDao) daoFactory.getDao(daoFactory.getContext(), QuestionType.class);
-            questionDao = (MySqlQuestionDao) daoFactory.getDao(daoFactory.getContext(), Question.class);
+            questionTypeDao = (MySqlQuestionTypeDao) daoFactory.getDao(connection, QuestionType.class);
+            questionDao = (MySqlQuestionDao) daoFactory.getDao(connection, Question.class);
             categories = questionTypeDao.getAll();
         } catch (PersistException e) {
-            e.printStackTrace();
+            logger.error("DAO unavailable", e);
         }
+
         List<Question> questions = new ArrayList<>();
         QuestionType category= new QuestionType();
         category.setName("All");
         category.setNameRu("Все");
+
         try {
             if (id != null && !id.equals("")) {
                 questions = questionDao.getByCategoryId(Integer.valueOf(id));
@@ -48,8 +63,15 @@ public class CategoriesCommand implements Command {
                 questions = questionDao.getAll();
             }
         } catch (PersistException e) {
-            e.printStackTrace();
+            logger.error("DAO queries error", e);
         }
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            logger.warn("Unable to close connection", e);
+        }
+
         request.setAttribute("category", category);
         request.setAttribute("questions", questions);
         request.setAttribute("categories", categories);

@@ -2,7 +2,9 @@ package ru.shiler.likeit.command.impl;
 
 import org.apache.log4j.Logger;
 import ru.shiler.likeit.command.Command;
+import ru.shiler.likeit.constants.CommandPath;
 import ru.shiler.likeit.constants.Login;
+import ru.shiler.likeit.database.ConnectionPool;
 import ru.shiler.likeit.database.dao.DaoFactory;
 import ru.shiler.likeit.database.dao.impl.MySqlDaoFactory;
 import ru.shiler.likeit.database.dao.impl.user.MySqlUserDao;
@@ -15,6 +17,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
@@ -53,19 +57,24 @@ public class RegisterCommand implements Command {
         }
         String email = request.getParameter("email");
         String username = request.getParameter("username");
-        String fullName = request.getParameter("fullName");
-        String age = request.getParameter("age");
-        String password = request.getParameter("password");
         DaoFactory daoFactory = new MySqlDaoFactory();
+        Connection connection = ConnectionPool.getConnection();
+        if (connection == null) {
+            request.getRequestDispatcher(CommandPath.ERROR).forward(request, response);
+            return;
+        }
         try {
-            MySqlUserDao userDao = (MySqlUserDao) daoFactory.getDao(daoFactory.getContext(), User.class);
+            MySqlUserDao userDao = (MySqlUserDao) daoFactory.getDao(connection, User.class);
             if (isUserExists(username, email, userDao)) {
                 response.sendRedirect("/register?error=user_already_exists");
                 return;
             }
             createUser(request, response, userDao);
+            connection.close();
         } catch (PersistException e) {
             logger.error("Can't check if user exists from database", e);
+        } catch (SQLException e) {
+            logger.warn("Unable to close connection", e);
         }
 
     }

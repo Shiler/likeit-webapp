@@ -1,0 +1,22 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: Evgeny Yushkevich
+  Date: 16.01.2017
+  Time: 18:18
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<fmt:bundle basename="app-strings" prefix="enable-js.">
+    <noscript>
+        <style type="text/css">
+            .no-js {
+                color: red;
+                text-shadow: 0px 0px 22px rgba(150, 150, 150, 1);
+            }
+        </style>
+        <h4 class="no-js"><fmt:message key="title"/></h4>
+    </noscript>
+</fmt:bundle>
+

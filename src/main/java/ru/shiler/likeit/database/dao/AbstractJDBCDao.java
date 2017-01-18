@@ -155,10 +155,10 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
     @Override
     public void update(T object) throws PersistException {
         // Сохраняем зависимости
-        saveDependences(object);
+        //saveDependences(object);
 
         String sql = getUpdateQuery();
-        try (PreparedStatement statement = connection.prepareStatement(sql);) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             prepareStatementForUpdate(statement, object); // заполнение аргументов запроса оставим на совесть потомков
             int count = statement.executeUpdate();
             if (count != 1) {

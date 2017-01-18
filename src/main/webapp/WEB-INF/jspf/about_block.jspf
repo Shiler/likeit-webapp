@@ -13,8 +13,8 @@
         <div class="row">
             <div class="col-sm-4">
                 <span class="glyphicon glyphicon-off logo-small"></span>
-                <h4><fmt:message key="javaee"/></h4>
-                <p></p>
+                <h4>JAVA EE</h4>
+                <p><fmt:message key="javaee"/></p>
             </div>
             <div class="col-sm-4">
                 <span class="glyphicon glyphicon-wrench logo-small"></span>

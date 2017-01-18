@@ -20,6 +20,16 @@ public class User implements Identified<Integer> {
     private int status;
     private int age;
     private int answerAmount;
+    private String locale;
+    private int totalRating;
+
+    public int getTotalRating() {
+        return totalRating;
+    }
+
+    public void setTotalRating(int totalRating) {
+        this.totalRating = totalRating;
+    }
 
     public int getAnswerAmount() {
         return answerAmount;
@@ -102,6 +112,14 @@ public class User implements Identified<Integer> {
         this.age = age;
     }
 
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -114,6 +132,8 @@ public class User implements Identified<Integer> {
                 ", userRole=" + userRole +
                 ", status=" + status +
                 ", age=" + age +
+                ", answerAmount=" + answerAmount +
+                ", locale='" + locale + '\'' +
                 '}';
     }
 }
