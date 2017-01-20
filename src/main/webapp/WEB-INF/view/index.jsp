@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-8">
+            <div style="padding-left: 0;" class="col-sm-8">
                 <div class="questions-block">
                     <div class="row">
                         <h4><fmt:message key="last-questions"/></h4>
