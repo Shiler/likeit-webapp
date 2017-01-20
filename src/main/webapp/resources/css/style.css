@@ -88,6 +88,15 @@ td .glyphicon {
     margin-bottom: 0px;
 }
 
+.like-icon {
+    font-size: 10px;
+}
+
+.like-icon:hover {
+    cursor: pointer;
+    color: red;
+}
+
 .last-questions {
 
 }

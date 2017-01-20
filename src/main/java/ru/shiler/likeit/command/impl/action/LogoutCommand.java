@@ -1,6 +1,6 @@
-package ru.shiler.likeit.command.impl;
+package ru.shiler.likeit.command.impl.action;
 
-import ru.shiler.likeit.command.Command;
+import ru.shiler.likeit.command.SimpleCommand;
 import ru.shiler.likeit.command.CommandUtils;
 
 import javax.servlet.ServletException;
@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Created by Evgeny Yushkevich on 16.01.2017.
  */
-public class LogoutCommand implements Command {
+public class LogoutCommand implements SimpleCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getSession().invalidate();

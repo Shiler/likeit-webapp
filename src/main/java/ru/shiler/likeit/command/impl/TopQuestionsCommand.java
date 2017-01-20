@@ -1,8 +1,8 @@
 package ru.shiler.likeit.command.impl;
 
 import org.apache.log4j.Logger;
-import ru.shiler.likeit.command.Command;
-import ru.shiler.likeit.constants.CommandPath;
+import ru.shiler.likeit.command.SimpleCommand;
+import ru.shiler.likeit.constants.JspPath;
 import ru.shiler.likeit.database.ConnectionPool;
 import ru.shiler.likeit.database.dao.DaoFactory;
 import ru.shiler.likeit.database.dao.impl.MySqlDaoFactory;
@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by Evgeny Yushkevich on 15.01.2017.
  */
-public class TopQuestionsCommand implements Command {
+public class TopQuestionsCommand implements SimpleCommand {
 
     private final static Logger logger = Logger.getLogger(TopQuestionsCommand.class);
 
@@ -37,7 +37,7 @@ public class TopQuestionsCommand implements Command {
         try {
             connection = (Connection) daoFactory.getContext();
             if (connection == null) {
-                request.getRequestDispatcher(CommandPath.ERROR).forward(request, response);
+                request.getRequestDispatcher(JspPath.ERROR).forward(request, response);
                 return;
             }
             MySqlQuestionDao questionDao = (MySqlQuestionDao) daoFactory.getDao(connection, Question.class);
@@ -49,6 +49,6 @@ public class TopQuestionsCommand implements Command {
             logger.warn("Unable to close connection", e);
         }
         request.setAttribute("topQuestions", topQuestions);
-        request.getRequestDispatcher(CommandPath.TOP).forward(request, response);
+        request.getRequestDispatcher(JspPath.TOP).forward(request, response);
     }
 }

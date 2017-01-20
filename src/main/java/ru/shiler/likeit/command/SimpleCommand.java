@@ -8,7 +8,8 @@ import java.io.IOException;
 /**
  * Created by Evgeny Yushkevich on 12.01.2017.
  */
-public interface Command {
 
+
+public interface SimpleCommand {
     void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 }

@@ -77,6 +77,30 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
         return getLimitOrderBy("answer_amount", limit, false);
     }
 
+    public boolean userHasQuestion(int userId, int questionId) throws PersistException {
+        String sql = "SELECT * FROM `question` WHERE `creator` = ? AND `id` = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, userId);
+            statement.setInt(2, questionId);
+            return statement.executeQuery().next();
+        } catch (SQLException e) {
+            throw new PersistException();
+        }
+    }
+
+    public boolean userAnsweredQuestion(int userId, int questionId) throws PersistException {
+        String sql = "SELECT * FROM `answer` WHERE `user_id` = ? AND `question_id` = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, userId);
+            statement.setInt(2, questionId);
+            return statement.executeQuery().next();
+        } catch (SQLException e) {
+            throw new PersistException();
+        }
+    }
+
     public User getByUserName(String userName) throws PersistException {
         List<User> list;
         String sql = getSelectQuery();

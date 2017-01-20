@@ -1,8 +1,8 @@
-package ru.shiler.likeit.command.impl;
+package ru.shiler.likeit.command.impl.page;
 
-import ru.shiler.likeit.command.Command;
+import ru.shiler.likeit.command.SimpleCommand;
 import ru.shiler.likeit.command.CommandUtils;
-import ru.shiler.likeit.constants.CommandPath;
+import ru.shiler.likeit.constants.JspPath;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,13 +12,13 @@ import java.io.IOException;
 /**
  * Created by Evgeny Yushkevich on 16.01.2017.
  */
-public class LoginPageCommand implements Command {
+public class RegisterPageCommand implements SimpleCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getSession().getAttribute("USER") != null) {
             response.sendRedirect(CommandUtils.getBackUri(request));
             return;
         }
-        request.getRequestDispatcher(CommandPath.LOGIN).forward(request, response);
+        request.getRequestDispatcher(JspPath.REGISTER).forward(request, response);
     }
 }

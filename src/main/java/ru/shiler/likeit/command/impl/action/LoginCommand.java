@@ -1,10 +1,8 @@
-package ru.shiler.likeit.command.impl;
+package ru.shiler.likeit.command.impl.action;
 
 import org.apache.log4j.Logger;
-import ru.shiler.likeit.command.Command;
+import ru.shiler.likeit.command.AbstractCommand;
 import ru.shiler.likeit.command.CommandUtils;
-import ru.shiler.likeit.constants.CommandPath;
-import ru.shiler.likeit.database.ConnectionPool;
 import ru.shiler.likeit.database.dao.DaoFactory;
 import ru.shiler.likeit.database.dao.impl.MySqlDaoFactory;
 import ru.shiler.likeit.database.dao.impl.user.MySqlUserDao;
@@ -17,12 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * Created by Evgeny Yushkevich on 16.01.2017.
  */
-public class LoginCommand implements Command {
+public class LoginCommand extends AbstractCommand {
 
     private final static Logger logger = Logger.getLogger(LoginCommand.class);
 
@@ -38,17 +35,9 @@ public class LoginCommand implements Command {
             response.sendRedirect("/login?error=empty_error");
             return;
         }
-        Connection connection = ConnectionPool.getConnection();
-        if (connection == null) {
-            request.getRequestDispatcher(CommandPath.ERROR).forward(request, response);
-            return;
-        }
-        User user = getUser(username, password, connection);
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            logger.warn("Unable to close connection", e);
-        }
+
+        User user = getUser(username, password, getConnection());
+
         if (user == null) {
             response.sendRedirect("/login?error=invalid_or_not_exists");
             return;
@@ -56,8 +45,6 @@ public class LoginCommand implements Command {
             request.getSession().setAttribute("USER", user);
 
             response.sendRedirect("/index");
-
-
         }
     }
 

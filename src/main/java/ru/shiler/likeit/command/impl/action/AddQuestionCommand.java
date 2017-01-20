@@ -1,10 +1,9 @@
-package ru.shiler.likeit.command.impl;
+package ru.shiler.likeit.command.impl.action;
 
 import org.apache.log4j.Logger;
-import ru.shiler.likeit.command.Command;
+import ru.shiler.likeit.command.AbstractCommand;
 import ru.shiler.likeit.command.CommandUtils;
-import ru.shiler.likeit.constants.CommandPath;
-import ru.shiler.likeit.database.ConnectionPool;
+import ru.shiler.likeit.constants.JspPath;
 import ru.shiler.likeit.database.dao.DaoFactory;
 import ru.shiler.likeit.database.dao.impl.MySqlDaoFactory;
 import ru.shiler.likeit.database.dao.impl.question.MySqlQuestionDao;
@@ -18,18 +17,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 
 /**
  * Created by Evgeny Yushkevich on 16.01.2017.
  */
-public class AddQuestionCommand implements Command {
+public class AddQuestionCommand extends AbstractCommand {
 
     private final static Logger logger = Logger.getLogger(AddQuestionCommand.class);
-    private Connection connection;
     private MySqlQuestionDao questionDao;
     private MySqlQuestionTypeDao questionTypeDao;
     private String backUri;
@@ -43,17 +39,11 @@ public class AddQuestionCommand implements Command {
         String content = request.getParameter("content");
         User user = (User) request.getSession().getAttribute("USER");
         if (!doAllChecks(title, category, content)) {
-            System.out.println("something goes wrong");
             response.sendRedirect(backUri);
             return;
         }
         Question question = composeQuestion(title, category, content, user);
         persist(question, request, response);
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            logger.warn("Unable to close connection", e);
-        }
     }
 
     private void persist(Question question, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -62,7 +52,7 @@ public class AddQuestionCommand implements Command {
             response.sendRedirect("/question?id=" + persistedQuestion.getId());
         } catch (PersistException e) {
             logger.error("Exception while persisting question", e);
-            request.getRequestDispatcher(CommandPath.ERROR).forward(request, response);
+            request.getRequestDispatcher(JspPath.ERROR).forward(request, response);
         }
     }
 
@@ -81,14 +71,13 @@ public class AddQuestionCommand implements Command {
     }
 
     private void initDao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        connection = ConnectionPool.getConnection();
         DaoFactory daoFactory = new MySqlDaoFactory();
         try {
-            questionDao = (MySqlQuestionDao) daoFactory.getDao(connection, Question.class);
-            questionTypeDao = (MySqlQuestionTypeDao) daoFactory.getDao(connection, QuestionType.class);
+            questionDao = (MySqlQuestionDao) daoFactory.getDao(getConnection(), Question.class);
+            questionTypeDao = (MySqlQuestionTypeDao) daoFactory.getDao(getConnection(), QuestionType.class);
         } catch (PersistException e) {
             logger.error("DAO queries error", e);
-            request.getRequestDispatcher(CommandPath.ERROR).forward(request, response);
+            request.getRequestDispatcher(JspPath.ERROR).forward(request, response);
         }
     }
 
@@ -102,7 +91,6 @@ public class AddQuestionCommand implements Command {
 
     private boolean checkCategory(String category) {
         try {
-            System.out.println(questionTypeDao.isExists(category));
             return questionTypeDao.isExists(category);
         } catch (PersistException e) {
             logger.error("DAO execution error", e);

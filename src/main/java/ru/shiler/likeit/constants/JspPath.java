@@ -3,7 +3,7 @@ package ru.shiler.likeit.constants;
 /**
  * Created by Evgeny Yushkevich on 15.01.2017.
  */
-public class CommandPath {
+public class JspPath {
 
     public final static String INDEX = "/WEB-INF/view/index.jsp";
     public final static String SEARCH = "/WEB-INF/view/search.jsp";

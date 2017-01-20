@@ -16,6 +16,7 @@ import java.util.List;
 public class AuthFilter implements Filter {
 
     private List<String> pathFilters = Arrays.asList(".add", ".edit", ".delete");
+    private List<String> ajaxExclusion = Arrays.asList("answer.add");
 
     public AuthFilter() {
 
@@ -51,6 +52,11 @@ public class AuthFilter implements Filter {
     private boolean isProtectedCommand(String uri) {
         for (String pathFilter : pathFilters) {
             if (uri.contains(pathFilter)) {
+                for (String exclusion : ajaxExclusion) {
+                    if (uri.contains(exclusion)) {
+                        return false;
+                    }
+                }
                 return true;
             }
         }

@@ -1,6 +1,9 @@
 package ru.shiler.likeit.command;
 
 import ru.shiler.likeit.command.impl.*;
+import ru.shiler.likeit.command.impl.action.*;
+import ru.shiler.likeit.command.impl.async.AddAnswerAsyncCommand;
+import ru.shiler.likeit.command.impl.page.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,14 +17,14 @@ import java.util.Map;
  */
 public class CommandInvoker {
 
-    private Map<String, Command> commandMap = new HashMap<>();
+    private Map<String, SimpleCommand> commandMap = new HashMap<>();
 
     public CommandInvoker() {
-        commandMap.put("/app/index", new IndexCommand());
-        commandMap.put("/app/search", new SearchCommand());
-        commandMap.put("/app/categories", new CategoriesCommand());
+        commandMap.put("/app/index", new IndexPageCommand());
+        commandMap.put("/app/search", new SearchPageCommand());
+        commandMap.put("/app/categories", new CategoriesPageCommand());
         commandMap.put("/app/top", new TopQuestionsCommand());
-        commandMap.put("/app/question", new QuestionCommand());
+        commandMap.put("/app/question", new QuestionPageCommand());
         commandMap.put("/app/setLocale", new SetLocaleCommand());
         commandMap.put("/app/register", new RegisterPageCommand());
         commandMap.put("/app/register.do", new RegisterCommand());
@@ -29,13 +32,17 @@ public class CommandInvoker {
         commandMap.put("/app/login", new LoginPageCommand());
         commandMap.put("/app/login.do", new LoginCommand());
         commandMap.put("/app/question.add", new AddQuestionCommand());
+        commandMap.put("/app/answer.add", new AddAnswerAsyncCommand());
     }
 
     public void invoke(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String commandName = getCommandName(request);
-        Command command = commandMap.get(commandName);
+        SimpleCommand command = commandMap.get(commandName);
         if (command != null) {
             command.execute(request, response);
+//            if(command instanceof AbstractCommand) {
+//                ((AbstractCommand) command).complete();
+//            }
         } else if (commandName.startsWith("/app/"))  {
             commandMap.get("/app/index").execute(request, response);
         }
