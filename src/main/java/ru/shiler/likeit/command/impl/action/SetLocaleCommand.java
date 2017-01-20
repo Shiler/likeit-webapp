@@ -2,7 +2,7 @@ package ru.shiler.likeit.command.impl.action;
 
 import org.apache.log4j.Logger;
 import ru.shiler.likeit.command.AbstractCommand;
-import ru.shiler.likeit.command.CommandUtils;
+import ru.shiler.likeit.util.CommandUtils;
 import ru.shiler.likeit.database.dao.DaoFactory;
 import ru.shiler.likeit.database.dao.impl.MySqlDaoFactory;
 import ru.shiler.likeit.database.dao.impl.user.MySqlUserDao;

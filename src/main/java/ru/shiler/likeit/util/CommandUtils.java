@@ -1,4 +1,4 @@
-package ru.shiler.likeit.command;
+package ru.shiler.likeit.util;
 
 import javax.servlet.http.HttpServletRequest;
 

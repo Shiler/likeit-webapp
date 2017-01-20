@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 
+<script type="text/javascript" src="/resources/javascript/question.js"></script>
+
 <fmt:bundle basename="app-strings" prefix="question.">
     <div class="container-fluid">
         <div class="row">

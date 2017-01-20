@@ -3,6 +3,7 @@ package ru.shiler.likeit.command;
 import ru.shiler.likeit.command.impl.*;
 import ru.shiler.likeit.command.impl.action.*;
 import ru.shiler.likeit.command.impl.async.AddAnswerAsyncCommand;
+import ru.shiler.likeit.command.impl.async.GetLastQuestionsAsyncCommand;
 import ru.shiler.likeit.command.impl.page.*;
 
 import javax.servlet.ServletException;
@@ -33,6 +34,7 @@ public class CommandInvoker {
         commandMap.put("/app/login.do", new LoginCommand());
         commandMap.put("/app/question.add", new AddQuestionCommand());
         commandMap.put("/app/answer.add", new AddAnswerAsyncCommand());
+        commandMap.put("/app/getLastQuestions", new GetLastQuestionsAsyncCommand());
     }
 
     public void invoke(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

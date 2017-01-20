@@ -1,7 +1,7 @@
 package ru.shiler.likeit.command.impl.action;
 
 import ru.shiler.likeit.command.SimpleCommand;
-import ru.shiler.likeit.command.CommandUtils;
+import ru.shiler.likeit.util.CommandUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

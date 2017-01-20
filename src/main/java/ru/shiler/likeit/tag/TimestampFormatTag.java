@@ -1,5 +1,7 @@
 package ru.shiler.likeit.tag;
 
+import ru.shiler.likeit.util.TimestampUtils;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
@@ -27,11 +29,7 @@ public class TimestampFormatTag extends SimpleTagSupport {
     @Override
     public void doTag() throws JspException, IOException {
         JspWriter out = getJspContext().getOut();
-        out.println(formatTimestamp(timestamp));
+        out.println(TimestampUtils.formatTimestamp(timestamp, locale));
     }
 
-    private String formatTimestamp(Timestamp timestamp) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd MMM yyyy", new Locale(locale));
-        return dateFormat.format(timestamp);
-    }
 }

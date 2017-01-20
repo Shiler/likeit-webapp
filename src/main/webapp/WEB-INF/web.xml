@@ -29,6 +29,7 @@
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
         </jsp-property-group>
+
         <jsp-property-group>
             <display-name>no_prelude_coda</display-name>
             <url-pattern>/WEB-INF/view-no-header/*</url-pattern>

@@ -1,7 +1,7 @@
 package ru.shiler.likeit.command.impl.page;
 
 import ru.shiler.likeit.command.SimpleCommand;
-import ru.shiler.likeit.command.CommandUtils;
+import ru.shiler.likeit.util.CommandUtils;
 import ru.shiler.likeit.constants.JspPath;
 
 import javax.servlet.ServletException;
