@@ -1,7 +1,7 @@
 package ru.shiler.likeit.command;
 
 import org.apache.log4j.Logger;
-import ru.shiler.likeit.command.impl.*;
+import ru.shiler.likeit.command.impl.TopQuestionsCommand;
 import ru.shiler.likeit.command.impl.action.*;
 import ru.shiler.likeit.command.impl.async.AddAnswerAsyncCommand;
 import ru.shiler.likeit.command.impl.async.GetLastQuestionsAsyncCommand;
@@ -42,19 +42,20 @@ public class CommandInvoker {
     public void invoke(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String commandName = getCommandName(request);
         try {
-            SimpleCommand command = (SimpleCommand) commandMap.get(commandName).newInstance();
-            if (command != null) {
+            Class commandClass = commandMap.get(commandName);
+            if (commandClass != null) {
+                SimpleCommand command = (SimpleCommand) commandClass.newInstance();
                 command.execute(request, response);
-                if(command instanceof AbstractCommand) {
+                if (command instanceof AbstractCommand) {
                     ((AbstractCommand) command).complete();
                 }
-            } else if (commandName.startsWith("/app/"))  {
+            } else if (commandName.startsWith("/app/")) {
                 ((SimpleCommand) commandMap.get("/app/index").newInstance()).execute(request, response);
             }
         } catch (IllegalAccessException e) {
             logger.error(e);
         } catch (InstantiationException e) {
-            logger.error("Instance creation error", e);
+            logger.error("Command instance creation error", e);
         }
     }
 
@@ -62,7 +63,7 @@ public class CommandInvoker {
         String requestURI = request.getRequestURI();
         if (requestURI.contains("?")) {
             int pos = requestURI.indexOf("?");
-            return requestURI.substring(0, pos-1);
+            return requestURI.substring(0, pos - 1);
         }
         return request.getRequestURI();
     }
