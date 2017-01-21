@@ -42,9 +42,9 @@ public class CommandInvoker {
         SimpleCommand command = commandMap.get(commandName);
         if (command != null) {
             command.execute(request, response);
-//            if(command instanceof AbstractCommand) {
-//                ((AbstractCommand) command).complete();
-//            }
+            if(command instanceof AbstractCommand) {
+                ((AbstractCommand) command).complete();
+            }
         } else if (commandName.startsWith("/app/"))  {
             commandMap.get("/app/index").execute(request, response);
         }

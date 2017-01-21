@@ -29,7 +29,7 @@ public abstract class AbstractCommand implements SimpleCommand {
 
     public void complete() {
         try {
-            connection.close();
+            if (connection != null && !connection.isClosed()) connection.close();
         } catch (SQLException e) {
             logger.warn("Unable to close connection", e);
         }
