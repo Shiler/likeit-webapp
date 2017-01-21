@@ -24,7 +24,7 @@
                             <p>${question.content}</p>
                             <p class="small-info" style="margin-bottom: 30px;"><i><fmt:message key="created"/>: <yo:timestampFormat timestamp="${question.createTime}" locale="${sessionScope.locale}"/></i></p>
                             <h4 style="margin-bottom: 20px;"><fmt:message key="answers"/>: ${fn:length(answers)}</h4>
-                            <table class="table table-striped">
+                            <table class="table table-striped" id="answersTable">
                                 <tbody>
                                 <c:forEach items="${answers}" var="item">
                                     <tr>
@@ -35,7 +35,7 @@
                                             <p>${item.text}</p>
                                             <hr>
                                             <p><fmt:message key="rating"/>: ${item.rating}</p>
-                                            <p>at <yo:timestampFormat timestamp="${item.createTime}" locale="${sessionScope.locale}"/></p>
+                                            <p><yo:timestampFormat timestamp="${item.createTime}" locale="${sessionScope.locale}"/></p>
                                         </td>
                                     </tr>
                                 </c:forEach>

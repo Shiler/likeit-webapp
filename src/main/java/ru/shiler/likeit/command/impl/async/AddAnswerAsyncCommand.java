@@ -12,6 +12,7 @@ import ru.shiler.likeit.database.exception.PersistException;
 import ru.shiler.likeit.model.answer.Answer;
 import ru.shiler.likeit.model.question.Question;
 import ru.shiler.likeit.model.user.User;
+import ru.shiler.likeit.util.TimestampUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +46,7 @@ public class AddAnswerAsyncCommand extends AbstractCommand {
         User user = (User) request.getSession().getAttribute("USER");
         String text = request.getParameter("text");
         String questionId = request.getParameter("question_id");
-        String responseJson = prepareJson(text, questionId, user);
+        String responseJson = prepareJson(text, questionId, user, locale);
         response.getWriter().write(responseJson);
     }
 
@@ -60,7 +61,7 @@ public class AddAnswerAsyncCommand extends AbstractCommand {
         }
     }
 
-    private String prepareJson(String text, String questionId, User user) {
+    private String prepareJson(String text, String questionId, User user, String locale) {
         Map<String, String> resultMap = new LinkedHashMap<>();
 
         if (checkAll(user, text, questionId, resultMap)) {
@@ -72,6 +73,11 @@ public class AddAnswerAsyncCommand extends AbstractCommand {
                 answer.setQuestion(questionDao.getByPK(Integer.parseInt(questionId)));
                 answerDao.persist(answer);
                 resultMap.put("response", "success");
+                resultMap.put("userId", String.valueOf(answer.getCreator().getId()));
+                resultMap.put("fullName", answer.getCreator().getFullName());
+                resultMap.put("text", answer.getText());
+                resultMap.put("rating", bundle.getString("question.rating") + ": " + String.valueOf(answer.getRating()));
+                resultMap.put("createTime", TimestampUtils.formatTimestamp(answer.getCreateTime(), locale));
             } catch (PersistException e) {
                 logger.error("Answer don't persisted.", e);
                 resultMap.put("response", "error");

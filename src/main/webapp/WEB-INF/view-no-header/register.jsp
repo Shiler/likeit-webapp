@@ -36,7 +36,7 @@
                         <div class="glyphicon glyphicon-chevron-left"></div>
                         <fmt:message key="back"/>
                     </a>
-                     or
+                    <fmt:message key="or"/>
                     <a href="/login">
                         <fmt:message key="to-login"/>
                         <div class="glyphicon glyphicon-chevron-right"></div>
