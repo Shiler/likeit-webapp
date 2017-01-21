@@ -1,5 +1,6 @@
 package ru.shiler.likeit.command;
 
+import org.apache.log4j.Logger;
 import ru.shiler.likeit.command.impl.*;
 import ru.shiler.likeit.command.impl.action.*;
 import ru.shiler.likeit.command.impl.async.AddAnswerAsyncCommand;
@@ -18,35 +19,42 @@ import java.util.Map;
  */
 public class CommandInvoker {
 
-    private Map<String, SimpleCommand> commandMap = new HashMap<>();
+    private Map<String, Class> commandMap = new HashMap<>();
+    private final static Logger logger = Logger.getLogger(CommandInvoker.class);
 
     public CommandInvoker() {
-        commandMap.put("/app/index", new IndexPageCommand());
-        commandMap.put("/app/search", new SearchPageCommand());
-        commandMap.put("/app/categories", new CategoriesPageCommand());
-        commandMap.put("/app/top", new TopQuestionsCommand());
-        commandMap.put("/app/question", new QuestionPageCommand());
-        commandMap.put("/app/setLocale", new SetLocaleCommand());
-        commandMap.put("/app/register", new RegisterPageCommand());
-        commandMap.put("/app/register.do", new RegisterCommand());
-        commandMap.put("/app/logout", new LogoutCommand());
-        commandMap.put("/app/login", new LoginPageCommand());
-        commandMap.put("/app/login.do", new LoginCommand());
-        commandMap.put("/app/question.add", new AddQuestionCommand());
-        commandMap.put("/app/answer.add", new AddAnswerAsyncCommand());
-        commandMap.put("/app/getLastQuestions", new GetLastQuestionsAsyncCommand());
+        commandMap.put("/app/index", IndexPageCommand.class);
+        commandMap.put("/app/search", SearchPageCommand.class);
+        commandMap.put("/app/categories", CategoriesPageCommand.class);
+        commandMap.put("/app/top", TopQuestionsCommand.class);
+        commandMap.put("/app/question", QuestionPageCommand.class);
+        commandMap.put("/app/setLocale", SetLocaleCommand.class);
+        commandMap.put("/app/register", RegisterPageCommand.class);
+        commandMap.put("/app/register.do", RegisterCommand.class);
+        commandMap.put("/app/logout", LogoutCommand.class);
+        commandMap.put("/app/login", LoginPageCommand.class);
+        commandMap.put("/app/login.do", LoginCommand.class);
+        commandMap.put("/app/question.add", AddQuestionCommand.class);
+        commandMap.put("/app/answer.add", AddAnswerAsyncCommand.class);
+        commandMap.put("/app/getLastQuestions", GetLastQuestionsAsyncCommand.class);
     }
 
     public void invoke(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String commandName = getCommandName(request);
-        SimpleCommand command = commandMap.get(commandName);
-        if (command != null) {
-            command.execute(request, response);
-            if(command instanceof AbstractCommand) {
-                ((AbstractCommand) command).complete();
+        try {
+            SimpleCommand command = (SimpleCommand) commandMap.get(commandName).newInstance();
+            if (command != null) {
+                command.execute(request, response);
+                if(command instanceof AbstractCommand) {
+                    ((AbstractCommand) command).complete();
+                }
+            } else if (commandName.startsWith("/app/"))  {
+                ((SimpleCommand) commandMap.get("/app/index").newInstance()).execute(request, response);
             }
-        } else if (commandName.startsWith("/app/"))  {
-            commandMap.get("/app/index").execute(request, response);
+        } catch (IllegalAccessException e) {
+            logger.error(e);
+        } catch (InstantiationException e) {
+            logger.error("Instance creation error", e);
         }
     }
 

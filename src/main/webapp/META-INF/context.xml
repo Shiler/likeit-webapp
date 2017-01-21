@@ -2,7 +2,9 @@
 <Context>
     <Resource name="jdbc/likeit" auth="Container"
               type="javax.sql.DataSource" maxActive="100"
-              maxIdle="30" maxWait="10000"
+              maxIdle="50" maxWait="10000"
+              minIdle = "10"
+              initialSize = "10"
               autoReconnect="true"
               removeAbandoned="true"
               removeAbandonedTimeout="30"
