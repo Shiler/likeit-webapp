@@ -57,6 +57,7 @@ public class GetLastQuestionsAsyncCommand extends AbstractCommand {
         for (int i = 0; i < questions.size(); i++) {
             Question question = questions.get(i);
             Map<String, String> questionMap = new LinkedHashMap<>();
+            questionMap.put("id", String.valueOf(question.getId()));
             questionMap.put("createTime", TimestampUtils.formatTimestamp(question.getCreateTime(), locale));
             questionMap.put("title", question.getTitle());
             questionMap.put("creator", question.getCreator().getFullName());

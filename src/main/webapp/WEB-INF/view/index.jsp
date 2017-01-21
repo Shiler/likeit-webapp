@@ -33,8 +33,8 @@
                 <div class="questions-block">
                     <div class="row">
                         <h4><fmt:message key="last-questions"/></h4>
-                        <table class="table table-striped">
-                            <tbody>
+                        <table id="lastQuestionsTable" class="table table-striped">
+                            <tbody id="lastQuestionsTableBody">
                             <c:forEach var="item" items="${lastQuestions}">
                                 <tr>
                                     <td><yo:timestampFormat timestamp="${item.createTime}" locale="${sessionScope.locale}"/></td>
