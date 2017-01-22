@@ -82,8 +82,40 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
         return getLimitOrderBy("rating", amount, false);
     }
 
+    public void like(int userId, int questionId) throws PersistException {
+        String sql = "INSERT INTO `user_rated_question` (`user_id`, `question_id`, `rated`) VALUES (?, ?, 1);";
+        String sql2 = "UPDATE `question` SET `rating` = `rating` + 1 WHERE id = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, userId);
+            statement.setInt(2, questionId);
+            statement.executeUpdate();
+            statement = getConnection().prepareStatement(sql2);
+            statement.setInt(1, questionId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new PersistException();
+        }
+    }
+
+    public void dislike(int userId, int questionId) throws PersistException {
+        String sql = "DELETE FROM `user_rated_question` WHERE `user_id` = ? AND `question_id` = ?;";
+        String sql2 = "UPDATE `question` SET `rating` = `rating` - 1 WHERE id = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, userId);
+            statement.setInt(2, questionId);
+            statement.executeUpdate();
+            statement = getConnection().prepareStatement(sql2);
+            statement.setInt(1, questionId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new PersistException();
+        }
+    }
+
     public boolean isUserRated(int userId, int questionId) throws PersistException {
-        String sql = "SELECT `rated` from `user_rated_question` WHERE user_id = ? AND question_id = ?;";
+        String sql = "SELECT `rated` from `user_rated_question` WHERE `user_id` = ? AND `question_id` = ?;";
         try {
             PreparedStatement statement = getConnection().prepareStatement(sql);
             statement.setInt(1, userId);

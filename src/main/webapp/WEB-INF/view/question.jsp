@@ -16,8 +16,8 @@
                     <div class="row">
                         <div class="question-page">
                             <h4><strong>${question.title}</strong></h4>
-                            <p class="small-info"><fmt:message key="rating"/>: <span style="font-weight: bold;">${question.rating} </span><a class="like-icon"
-                                    href=""><span class="glyphicon glyphicon-heart"></span></a></p>
+                            <p class="small-info"><fmt:message key="rating"/>: <span id="ratingField" style="font-weight: bold;">${question.rating} </span><a class="<c:if test="${liked eq true}">liked </c:if> like-icon"
+                                    id="likeLink" href="/like?id=${question.id}"><span class="glyphicon glyphicon-heart"></span></a></p>
                             <p class="small-info"><fmt:message key="by"/> <a href="/user?id=${question.creator.id}">${question.creator.fullName}</a></p>
 
                             <hr>
@@ -42,9 +42,9 @@
                                 </tbody>
                             </table>
                             <form method="POST" action="answer.add" id="answerForm">
-                            <textarea class="form-textarea" name="text" rows="4" placeholder="<fmt:message key="leave-answer"/>"
+                            <textarea class="form-textarea" name="text" id="answer-input" rows="4" placeholder="<fmt:message key="leave-answer"/>"
                                       style="margin-bottom: 5px;"></textarea>
-                                <input style="display: none;" type="text" id="answer-input" name="question_id" value="${question.id}">
+                                <input style="display: none;" type="text" name="question_id" value="${question.id}">
                                 <input type="submit" id="submitQuestion" class="form-input" value="<fmt:message key="submit"/>">
                             </form>
                             <div id="errorAlert" style="display: none;" class="alert alert-error">This is an error alert.</div>

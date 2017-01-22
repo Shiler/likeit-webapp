@@ -97,6 +97,10 @@ td .glyphicon {
     color: red;
 }
 
+.liked, .liked:visited, .liked:active, .liked:link, .liked:hover {
+    color: red;
+}
+
 .last-questions {
 
 }

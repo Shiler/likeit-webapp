@@ -10,6 +10,7 @@ import ru.shiler.likeit.database.dao.impl.question.MySqlQuestionDao;
 import ru.shiler.likeit.database.exception.PersistException;
 import ru.shiler.likeit.model.answer.Answer;
 import ru.shiler.likeit.model.question.Question;
+import ru.shiler.likeit.model.user.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,12 @@ public class QuestionPageCommand extends AbstractCommand {
                 MySqlAnswerDao answerDao = (MySqlAnswerDao) daoFactory.getDao(getConnection(), Answer.class);
                 question = questionDao.getByPK(Integer.parseInt(query));
                 answers = answerDao.getByQuestionId(question.getId());
+                User user = (User) request.getSession().getAttribute("USER");
+                boolean liked = false;
+                if (user != null) {
+                    liked = questionDao.isUserRated(user.getId(), question.getId());
+                }
+                request.setAttribute("liked", liked);
                 request.setAttribute("question", question);
                 request.setAttribute("answers", answers);
                 request.getRequestDispatcher(JspPath.QUESTION).forward(request, response);
