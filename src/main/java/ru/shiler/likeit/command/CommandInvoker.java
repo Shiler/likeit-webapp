@@ -1,7 +1,8 @@
 package ru.shiler.likeit.command;
 
 import org.apache.log4j.Logger;
-import ru.shiler.likeit.command.impl.TopQuestionsCommand;
+import ru.shiler.likeit.command.impl.async.RateAnswerAsyncCommand;
+import ru.shiler.likeit.command.impl.page.TopQuestionsPageCommand;
 import ru.shiler.likeit.command.impl.action.*;
 import ru.shiler.likeit.command.impl.async.AddAnswerAsyncCommand;
 import ru.shiler.likeit.command.impl.async.GetLastQuestionsAsyncCommand;
@@ -27,7 +28,7 @@ public class CommandInvoker {
         commandMap.put("/app/index", IndexPageCommand.class);
         commandMap.put("/app/search", SearchPageCommand.class);
         commandMap.put("/app/categories", CategoriesPageCommand.class);
-        commandMap.put("/app/top", TopQuestionsCommand.class);
+        commandMap.put("/app/top", TopQuestionsPageCommand.class);
         commandMap.put("/app/question", QuestionPageCommand.class);
         commandMap.put("/app/setLocale", SetLocaleCommand.class);
         commandMap.put("/app/register", RegisterPageCommand.class);
@@ -39,6 +40,7 @@ public class CommandInvoker {
         commandMap.put("/app/answer.add", AddAnswerAsyncCommand.class);
         commandMap.put("/app/getLastQuestions", GetLastQuestionsAsyncCommand.class);
         commandMap.put("/app/like", LikeQuestionAsyncCommand.class);
+        commandMap.put("/app/answer.rate", RateAnswerAsyncCommand.class);
     }
 
     public void invoke(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

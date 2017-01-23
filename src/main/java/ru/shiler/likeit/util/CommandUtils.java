@@ -9,6 +9,16 @@ public class CommandUtils {
 
     public static String getBackUri(HttpServletRequest request) {
         String referer = request.getHeader("Referer");
+
+        String uri = getCommandFromUri(referer);
+        if (uri != null) {
+            return uri;
+        } else {
+            return "/index";
+        }
+    }
+
+    public static String getBackUri(String referer) {
         String uri = getCommandFromUri(referer);
         if (uri != null) {
             return uri;
@@ -25,7 +35,7 @@ public class CommandUtils {
                 counter++;
             }
             if (counter == 3) {
-                return uri.substring(i);
+                return uri.substring(i, uri.length());
             }
         }
         return null;

@@ -1,6 +1,5 @@
 package ru.shiler.likeit.database.dao.impl.answer;
 
-import ru.shiler.likeit.database.Utils;
 import ru.shiler.likeit.database.dao.AbstractJDBCDao;
 import ru.shiler.likeit.database.dao.DaoFactory;
 import ru.shiler.likeit.database.exception.PersistException;
@@ -41,6 +40,50 @@ public class MySqlAnswerDao extends AbstractJDBCDao<Answer, Integer> {
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
                 return rs.getDouble(1);
+            } else {
+                return 0;
+            }
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+    }
+
+    public void rate(int answerId, int userId, int rate) throws PersistException {
+        String sql = "SELECT `rate` FROM `answer_rating` WHERE `answer_id` = ? AND `user_id` = ?;";
+        boolean isAlreadyRated;
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, answerId);
+            statement.setInt(2, userId);
+            isAlreadyRated = statement.executeQuery().next();
+            if (isAlreadyRated) {
+                sql = "UPDATE `answer_rating` SET `rate` = ? WHERE `answer_id` = ? AND `user_id` = ?;";
+                statement = getConnection().prepareStatement(sql);
+                statement.setInt(1, rate);
+                statement.setInt(2, answerId);
+                statement.setInt(3, userId);
+                statement.executeUpdate();
+            } else {
+                sql = "INSERT INTO `answer_rating` (`answer_id`, `user_id`, `rate`) VALUES (?, ?, ?);";
+                statement = getConnection().prepareStatement(sql);
+                statement.setInt(1, answerId);
+                statement.setInt(2, userId);
+                statement.setInt(3, rate);
+                statement.executeUpdate();
+            }
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+    }
+
+    public int getVoteCount(int answerId) throws PersistException {
+        String sql = "SELECT COUNT(`rate`) FROM `answer_rating` WHERE `answer_id` = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, answerId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
             } else {
                 return 0;
             }
@@ -100,6 +143,7 @@ public class MySqlAnswerDao extends AbstractJDBCDao<Answer, Integer> {
                 answer.setCreateTime(rs.getTimestamp("create_time"));
                 answer.setText(rs.getString("text"));
                 answer.setRating(getAnswerRating(answer.getId()));
+                answer.setVoteCount(getVoteCount(answer.getId()));
                 result.add(answer);
             }
         } catch (Exception e) {

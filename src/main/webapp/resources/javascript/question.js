@@ -1,5 +1,37 @@
 $(document).ready(function () {
 
+    $('.stars input').click(function () {
+        var idAttr = $(this).attr('id').split('-');
+        var answerId = idAttr.pop();
+        var rate = idAttr.pop();
+        $.ajax({
+
+            url: '/answer.rate?answerId='+answerId+'&rate='+rate,
+            type: "GET",
+            dataType: 'json',
+            success: function (data) {
+                switch (data.result) {
+                    case 'success': {
+                        $(this).removeAttr("checked");
+                        var rating = data.newRating;
+                        var voteCount = data.newVoteCount;
+                        var checkedStar = Math.floor(rating, 1);
+                        $('#star-'+checkedStar+'-'+answerId).attr('checked');
+                        $('#rating-'+answerId+'').text(rating);
+                        $('#voteCount-'+answerId+'').text(voteCount);
+                    }
+                        break;
+
+                    case 'false': {
+
+                    }
+                        break;
+                }
+            }
+
+        });
+    });
+
     $('#likeLink').click(function (e) {
         e.preventDefault();
         $.ajax({
@@ -82,6 +114,9 @@ $(document).ready(function () {
                         $(answerRow).append(answerCol);
                         $(table).append(answerRow);
 
+                        var answerCountElem = $('#answerCount');
+                        var answerCount = Number($('#answerCount').html) + 1;
+                        $(answerCountElem).html(answerCount);
                     }
                         break;
                 }

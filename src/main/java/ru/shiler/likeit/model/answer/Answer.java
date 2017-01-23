@@ -5,7 +5,6 @@ import ru.shiler.likeit.model.question.Question;
 import ru.shiler.likeit.model.user.User;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * Created by Evgeny Yushkevich on 12.01.2017.
@@ -18,6 +17,15 @@ public class Answer implements Identified<Integer> {
     private Timestamp createTime;
     private String text;
     private double rating;
+    private int voteCount;
+
+    public int getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(int voteCount) {
+        this.voteCount = voteCount;
+    }
 
     public double getRating() {
         return rating;

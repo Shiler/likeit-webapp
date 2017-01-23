@@ -1,4 +1,4 @@
-package ru.shiler.likeit.command.impl;
+package ru.shiler.likeit.command.impl.page;
 
 import org.apache.log4j.Logger;
 import ru.shiler.likeit.command.SimpleCommand;
@@ -21,9 +21,9 @@ import java.util.List;
 /**
  * Created by Evgeny Yushkevich on 15.01.2017.
  */
-public class TopQuestionsCommand implements SimpleCommand {
+public class TopQuestionsPageCommand implements SimpleCommand {
 
-    private final static Logger logger = Logger.getLogger(TopQuestionsCommand.class);
+    private final static Logger logger = Logger.getLogger(TopQuestionsPageCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
