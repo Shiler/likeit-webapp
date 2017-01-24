@@ -39,7 +39,7 @@
                             <table class="table table-striped" id="answersTable">
                                 <tbody>
                                 <c:forEach items="${answers}" var="item">
-                                    <tr>
+                                    <tr id="answer-${item.id}">
                                         <td class="col-sm-2">
                                             <a href="/profile?id=${item.creator.id}"><p>${item.creator.fullName}</p></a>
                                         </td>
@@ -52,10 +52,10 @@
                                                   id="ratingsForm-${item.id}">
                                                 <div class="stars">
                                                     <c:choose>
-                                                        <c:when test="${(user ne null) && (user.id eq item.creator.id)}">
+                                                        <c:when test="${(user eq null || (user ne null) && (user.id eq item.creator.id))}">
                                                             <c:forEach var="i" begin="1" end="5">
-                                                                <input type="radio"
-                                                                       <c:if test="${rate eq i}">checked</c:if> disabled
+                                                                <input type="radio" disabled
+                                                                       <c:if test="${rate eq i}">checked</c:if>
                                                                        name="star" class="star-${i}-foreign"
                                                                        id="star-${i}-${item.id}">
                                                                 <label class="foreign-star star-${i}-foreign"
@@ -86,8 +86,8 @@
                                                                    locale="${sessionScope.locale}"/></p>
 
                                             <c:if test="${(user ne null) && (user.id eq item.creator.id)}">
-                                                <p><a href=""><span class="glyphicon glyphicon-pencil"></span></a>
-                                                    <a href=""><span class="glyphicon glyphicon-remove"></span></a></p>
+                                                <p><a id="edit-answer" href=""><span class="glyphicon glyphicon-pencil"></span></a>
+                                                    <a id="deleteAnswerLink" href="/answer.delete?id=${item.id}"><span class="glyphicon glyphicon-remove"></span></a></p>
                                             </c:if>
                                         </td>
                                     </tr>

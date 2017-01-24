@@ -32,6 +32,21 @@ public class MySqlAnswerDao extends AbstractJDBCDao<Answer, Integer> {
         addRelation(Answer.class, "question");
     }
 
+    public void delete(int answerId) throws PersistException {
+        String sql = "DELETE FROM `answer` WHERE `id` = ?;";
+        String sql2 = "DELETE FROM `answer_rating` WHERE `answer_id` = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, answerId);
+            statement.executeUpdate();
+            statement = getConnection().prepareStatement(sql2);
+            statement.setInt(1, answerId);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+    }
+
     public double getAnswerRating(int answerId) throws PersistException {
         String sql = "SELECT AVG(`rate`) FROM `answer_rating` WHERE `answer_id` = ?;";
         try {

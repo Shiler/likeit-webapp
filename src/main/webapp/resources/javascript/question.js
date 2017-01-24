@@ -32,6 +32,31 @@ $(document).ready(function () {
         });
     });
 
+    $('#deleteAnswerLink').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: $('#deleteAnswerLink').attr('href'),
+            type: "GET",
+            dataType: 'json',
+            success: function (data) {
+                switch (data.result) {
+                    case 'success': {
+                        var answerIdSelector = '#answer-' + $('#deleteAnswerLink').attr('href').replace('/answer.delete?id=', '');
+                        $(answerIdSelector).remove();
+                        $('#answerCount').text(data.newAnswerCount);
+                    }
+                        break;
+
+                    case 'false': {
+
+                    }
+                        break;
+                }
+            }
+
+        });
+    });
+
     $('#likeLink').click(function (e) {
         e.preventDefault();
         $.ajax({
@@ -124,3 +149,4 @@ $(document).ready(function () {
     });
 
 });
+

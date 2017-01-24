@@ -56,7 +56,7 @@
                                         <p>${item.content}</p>
                                     </td>
                                     <td class="col-sm-2">
-                                        <fmt:message key="by"/> <a href="/user?id=${item.creator.id}">${item.creator.fullName}</a>
+                                        <fmt:message key="by"/> <a href="/profile?id=${item.creator.id}">${item.creator.fullName}</a>
                                         <br>
                                         <div class="glyphicon glyphicon-comment"></div>
                                             <fmt:message key="answer-amount"/>: ${item.answerAmount}
