@@ -41,7 +41,7 @@ public class GetLastQuestionsAsyncCommand extends AbstractCommand {
     private String formResponse() {
         Map<String, Object> resultMap = new LinkedHashMap<>();
         try {
-            List<Question> lastQuestions = questionDao.getLastQuestions(5);
+            List<Question> lastQuestions = questionDao.getLastQuestions(6);
             resultMap.put("response", "success");
             putQuestions(resultMap, lastQuestions);
         } catch (PersistException e) {

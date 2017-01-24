@@ -41,6 +41,7 @@ public class CommandInvoker {
         commandMap.put("/app/getLastQuestions", GetLastQuestionsAsyncCommand.class);
         commandMap.put("/app/like", LikeQuestionAsyncCommand.class);
         commandMap.put("/app/answer.rate", RateAnswerAsyncCommand.class);
+        commandMap.put("/app/profile", UserPageCommand.class);
     }
 
     public void invoke(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

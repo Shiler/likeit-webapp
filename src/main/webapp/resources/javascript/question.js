@@ -114,9 +114,7 @@ $(document).ready(function () {
                         $(answerRow).append(answerCol);
                         $(table).append(answerRow);
 
-                        var answerCountElem = $('#answerCount');
-                        var answerCount = Number($('#answerCount').html) + 1;
-                        $(answerCountElem).html(answerCount);
+                        $('#answerCount').text(data.newAnswerCount);
                     }
                         break;
                 }

@@ -78,6 +78,7 @@ public class AddAnswerAsyncCommand extends AbstractCommand {
                 resultMap.put("text", answer.getText());
                 resultMap.put("rating", bundle.getString("question.rating") + ": " + String.valueOf(answer.getRating()));
                 resultMap.put("createTime", TimestampUtils.formatTimestamp(answer.getCreateTime(), locale));
+                resultMap.put("newAnswerCount", String.valueOf(questionDao.getAnswerAmount(Integer.parseInt(questionId))));
             } catch (PersistException e) {
                 logger.error("Answer don't persisted.", e);
                 resultMap.put("response", "error");

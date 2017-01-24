@@ -1,13 +1,15 @@
 package ru.shiler.likeit.database.dao.impl.user;
 
-import ru.shiler.likeit.database.Utils;
 import ru.shiler.likeit.database.dao.AbstractJDBCDao;
 import ru.shiler.likeit.database.dao.DaoFactory;
 import ru.shiler.likeit.database.exception.PersistException;
 import ru.shiler.likeit.model.user.User;
 import ru.shiler.likeit.model.user.UserRole;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,7 +57,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
             statement.setInt(1, limit);
             ResultSet resultSet = statement.executeQuery();
             int index = 0;
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 users[index] = resultSet.getInt("user_id");
                 rates[index] = resultSet.getInt("total_rating");
                 index++;
@@ -77,6 +79,43 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
         return getLimitOrderBy("answer_amount", limit, false);
     }
 
+    public int getQuestionCount(int userId) throws PersistException {
+        String sql = "SELECT COUNT(*) AS 'count' FROM `question` WHERE `creator` = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, userId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count");
+                } else {
+                    return 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new PersistException(e);
+        }
+    }
+
+    public int getAnswerCount(int userId) throws PersistException {
+        String sql = "SELECT COUNT(*) AS 'count' FROM `answer` WHERE `user_id` = ?;";
+        try {
+            ResultSet resultSet;
+            try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+                statement.setInt(1, userId);
+                resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    return resultSet.getInt("count");
+                } else {
+                    return 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new PersistException(e);
+        }
+    }
+
     public boolean userHasQuestion(int userId, int questionId) throws PersistException {
         String sql = "SELECT * FROM `question` WHERE `creator` = ? AND `id` = ?;";
         try {
@@ -85,7 +124,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
             statement.setInt(2, questionId);
             return statement.executeQuery().next();
         } catch (SQLException e) {
-            throw new PersistException();
+            throw new PersistException(e);
         }
     }
 
@@ -97,7 +136,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
             statement.setInt(2, questionId);
             return statement.executeQuery().next();
         } catch (SQLException e) {
-            throw new PersistException();
+            throw new PersistException(e);
         }
     }
 

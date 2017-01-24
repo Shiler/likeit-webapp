@@ -13,4 +13,5 @@ public class JspPath {
     public final static String REGISTER = "/WEB-INF/view-no-header/register.jsp";
     public final static String LOGIN = "/WEB-INF/view-no-header/login.jsp";
     public final static String ERROR = "/WEB-INF/view-no-header/error.jsp";
+    public final static String PROFILE = "/WEB-INF/view/profile.jsp";
 }

@@ -27,7 +27,7 @@
                                     id="likeLink" href="/like?id=${question.id}"><span
                                     class="glyphicon glyphicon-heart"></span></a></p>
                             <p class="small-info"><fmt:message key="by"/> <a
-                                    href="/user?id=${question.creator.id}">${question.creator.fullName}</a></p>
+                                    href="/profile?id=${question.creator.id}">${question.creator.fullName}</a></p>
 
                             <hr>
                             <p>${question.content}</p>
@@ -46,7 +46,7 @@
                                         <td class="col-sm-9">
                                             <p>${item.text}</p>
                                             <hr>
-                                            <fmt:formatNumber var="rate" value="${item.rating div 1}" pattern="#"/>
+                                            <c:set var="rate" value="${fn:substringBefore(item.rating, '.')}"/>
 
                                             <form class="ratingsForm<c:if test="${(user ne null) && (user.id eq item.creator.id)}">-disabled</c:if>"
                                                   id="ratingsForm-${item.id}">

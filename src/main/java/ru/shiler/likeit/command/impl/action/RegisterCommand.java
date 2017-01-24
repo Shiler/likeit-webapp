@@ -77,13 +77,14 @@ public class RegisterCommand extends AbstractCommand {
         UserRole userRole = new UserRole();
         userRole.setId(1);
         user.setUserRole(userRole);
+        user.setLocale((String) req.getSession().getAttribute("locale"));
         return user;
     }
 
     private void createUser(HttpServletRequest request, HttpServletResponse response, MySqlUserDao userDao) throws IOException {
         User user = buildUserFromRequest(request);
         try {
-            userDao.persist(user);
+            user = userDao.persist(user);
             request.getSession().setAttribute(Login.SESSION_USER_ATTRIBUTE, user);
 
             response.sendRedirect("/index");

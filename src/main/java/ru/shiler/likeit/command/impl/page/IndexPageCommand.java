@@ -33,7 +33,7 @@ public class IndexPageCommand extends AbstractCommand {
         try {
             MySqlQuestionDao questionDao = (MySqlQuestionDao) daoFactory.getDao(getConnection(), Question.class);
             MySqlUserDao userDao = (MySqlUserDao) daoFactory.getDao(getConnection(), User.class);
-            lastQuestions = questionDao.getLastQuestions(5);
+            lastQuestions = questionDao.getLastQuestions(6);
             mostRatedQuestions = questionDao.getMostRatedQuestions(6);
             topUsers = userDao.getTopUsers(5);
         } catch (PersistException e) {

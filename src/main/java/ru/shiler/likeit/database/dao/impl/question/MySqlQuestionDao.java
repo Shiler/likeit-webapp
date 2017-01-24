@@ -60,7 +60,21 @@ public class MySqlQuestionDao extends AbstractJDBCDao<Question, Integer> {
         return result;
     }
 
-    private int getAnswerAmount(int id) {
+    public List<Question> searchByUser(int userId) throws PersistException {
+        List<Question> result = new ArrayList<>();
+        String sql = getSelectQuery() + "WHERE `creator` = ?;";
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, userId);
+            ResultSet rs = statement.executeQuery();
+            result = parseResultSet(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public int getAnswerAmount(int id) {
         String sql = "SELECT count(*) FROM answer where `question_id` = ?;";
         try {
             PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
