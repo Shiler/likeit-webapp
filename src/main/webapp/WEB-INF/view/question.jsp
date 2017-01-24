@@ -44,7 +44,9 @@
                                             <a href="/profile?id=${item.creator.id}"><p>${item.creator.fullName}</p></a>
                                         </td>
                                         <td class="col-sm-9">
-                                            <p>${item.text}</p>
+                                            <div id="answerTextBlock">
+                                                <p id="answerText">${item.text}</p>
+                                            </div>
                                             <hr>
                                             <c:set var="rate" value="${fn:substringBefore(item.rating, '.')}"/>
 
@@ -86,7 +88,7 @@
                                                                    locale="${sessionScope.locale}"/></p>
 
                                             <c:if test="${(user ne null) && (user.id eq item.creator.id)}">
-                                                <p><a id="edit-answer" href=""><span class="glyphicon glyphicon-pencil"></span></a>
+                                                <p><a id="editAnswerLink" href="/answer.edit?id=${item.id}"><span class="glyphicon glyphicon-pencil"></span></a>
                                                     <a id="deleteAnswerLink" href="/answer.delete?id=${item.id}"><span class="glyphicon glyphicon-remove"></span></a></p>
                                             </c:if>
                                         </td>

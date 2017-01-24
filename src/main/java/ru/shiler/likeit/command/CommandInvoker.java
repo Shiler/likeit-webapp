@@ -40,6 +40,7 @@ public class CommandInvoker {
         commandMap.put("/app/answer.rate", RateAnswerAsyncCommand.class);
         commandMap.put("/app/profile", UserPageCommand.class);
         commandMap.put("/app/answer.delete", DeleteAnswerAsyncCommand.class);
+        commandMap.put("/app/answer.edit", EditAnswerAsyncCommand.class);
     }
 
     public void invoke(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

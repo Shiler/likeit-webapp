@@ -71,8 +71,9 @@ public class AddAnswerAsyncCommand extends AbstractCommand {
                 answer.setText(text);
                 answer.setCreateTime(new Timestamp(new Date().getTime()));
                 answer.setQuestion(questionDao.getByPK(Integer.parseInt(questionId)));
-                answerDao.persist(answer);
+                answer = answerDao.persist(answer);
                 resultMap.put("response", "success");
+                resultMap.put("answerId", String.valueOf(answer.getId()));
                 resultMap.put("userId", String.valueOf(answer.getCreator().getId()));
                 resultMap.put("fullName", answer.getCreator().getFullName());
                 resultMap.put("text", answer.getText());

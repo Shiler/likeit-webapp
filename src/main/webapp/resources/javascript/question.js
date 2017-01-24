@@ -57,6 +57,50 @@ $(document).ready(function () {
         });
     });
 
+    $('#editAnswerLink').click(function (e) {
+        e.preventDefault();
+        answerId = $('#editAnswerLink').attr('href').replace('/answer.edit?id=', '');
+        var answerText = document.getElementById("answerText").innerText;
+        console.log(answerText);
+        var tempAnswerParagraph = $('#answerTextBlock').find('p');
+        $('#answerTextBlock').find('p').remove();
+        var answerEditTextarea = $('<textarea class="form-textarea" rows="5" name="text"></textarea>');
+        $(answerEditTextarea).val(answerText);
+        var answerEditConfirm = $('<input class="btn btn-small" type="button" value="OK"/>');
+        var answerEditDeny = $('<input class="btn btn-small" type="button" value="cancel"/>');
+
+        $(answerEditDeny).click(function () {
+            $(answerEditTextarea).remove();
+            $(answerEditConfirm).remove();
+            $(answerEditDeny).remove();
+            $('#answerTextBlock').find('br').remove();
+            $('#answerTextBlock').append(tempAnswerParagraph);
+        });
+
+        $(answerEditConfirm).click(function () {
+            $.ajax({
+                url: $('#editAnswerLink').attr('href') + '&text='+answerEditTextarea.val(),
+                type: "GET",
+                dataType: 'json',
+                success: function (data) {
+                    if (data.result == 'success') {
+                        $(tempAnswerParagraph).text(answerEditTextarea.val());
+                    }
+                    $(answerEditTextarea).remove();
+                    $(answerEditConfirm).remove();
+                    $(answerEditDeny).remove();
+                    $('#answerTextBlock').find('br').remove();
+                    $('#answerTextBlock').append(tempAnswerParagraph);
+                }
+            });
+        });
+
+        $('#answerTextBlock').append(answerEditTextarea);
+        $('#answerTextBlock').append($('<br>'));
+        $('#answerTextBlock').append(answerEditConfirm);
+        $('#answerTextBlock').append(answerEditDeny);
+    });
+
     $('#likeLink').click(function (e) {
         e.preventDefault();
         $.ajax({
@@ -136,6 +180,25 @@ $(document).ready(function () {
                         var answerCreateTime = document.createElement('p');
                         $(answerCreateTime).html(createTime);
                         $(answerCol).append(answerCreateTime);
+
+                        var editDelete = document.createElement('p');
+                        var editLink = document.createElement('a');
+                        $(editLink).attr('id', 'editAnswerLink');
+                        $(editLink).attr('href', '/answer.edit?id='+data.answerId);
+                        var editSpan = document.createElement('span');
+                        $(editSpan).attr('class', 'glyphicon glyphicon-pencil');
+                        $(editLink).append(editSpan);
+                        $(editDelete.append(editLink));
+                        $(editDelete).append(' ');
+                        var deleteLink = document.createElement('a');
+                        $(deleteLink).attr('id', 'deleteAnswerLink');
+                        $(deleteLink).attr('href', '/answer.delete?id='+data.answerId);
+                        var deleteSpan = document.createElement('span');
+                        $(deleteSpan).attr('class', 'glyphicon glyphicon-remove');
+                        $(deleteLink).append(deleteSpan);
+                        $(editDelete.append(deleteLink));
+
+                        $(answerCol).append(editDelete);
                         $(answerRow).append(answerCol);
                         $(table).append(answerRow);
 

@@ -169,15 +169,23 @@ public class MySqlAnswerDao extends AbstractJDBCDao<Answer, Integer> {
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, Answer object) throws PersistException {
-        prepareStatement(statement, object);
+        try {
+            int creator = (object.getCreator() == null || object.getCreator().getId() == null) ? -1
+                    : object.getCreator().getId();
+            int question = (object.getQuestion() == null || object.getQuestion().getId() == null) ? -1
+                    : object.getQuestion().getId();
+            statement.setInt(1, creator);
+            statement.setInt(2, question);
+            statement.setTimestamp(3, object.getCreateTime());
+            statement.setString(4, object.getText());
+            statement.setInt(5, object.getId());
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
     }
 
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, Answer object) throws PersistException {
-        prepareStatement(statement, object);
-    }
-
-    private void prepareStatement(PreparedStatement statement, Answer object) throws PersistException {
         try {
             int creator = (object.getCreator() == null || object.getCreator().getId() == null) ? -1
                     : object.getCreator().getId();
