@@ -7,7 +7,8 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import java.io.IOException;
 
 /**
- * Created by Evgeny Yushkevich on 14.01.2017.
+ * Cuts the <code>body</code> of the tag for <code>symbols</code>
+ * amount and adds '...' to the end.
  */
 public class CutTag extends BodyTagSupport {
 
@@ -23,7 +24,7 @@ public class CutTag extends BodyTagSupport {
         JspWriter out = bodyContent.getEnclosingWriter();
         String text = bodyContent.getString();
         if (text.length() > symbols) {
-            text = text.substring(0, symbols-1) + "...";
+            text = text.substring(0, symbols - 1) + "...";
         }
         bodyContent.clearBody();
         try {

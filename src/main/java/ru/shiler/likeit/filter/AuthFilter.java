@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Evgeny Yushkevich on 12.01.2017.
+ * Prevents unauthorized access to protected resources and actions
  */
 public class AuthFilter implements Filter {
 

@@ -5,6 +5,7 @@ package ru.shiler.likeit.database;
  */
 public class Utils {
 
+    @Deprecated
     public static java.sql.Date convert(java.util.Date date) {
         if (date == null) {
             return null;

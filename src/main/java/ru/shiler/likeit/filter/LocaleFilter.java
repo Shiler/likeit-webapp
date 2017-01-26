@@ -10,7 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Evgeny Yushkevich on 16.01.2017.
+ * <code>LocaleFilter</code> is a {@link Filter} that
+ * sets up default locale if it does not specified.
+ * If it is an authorized user the locale is set depend on user's stored locale.
  */
 public class LocaleFilter implements Filter {
 

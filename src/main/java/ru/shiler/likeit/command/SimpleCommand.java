@@ -6,10 +6,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by Evgeny Yushkevich on 12.01.2017.
+ * Defines a Command Pattern object to handle a client request information
+ * provided by {@link javax.servlet.http.HttpServletRequest}. Business logic class.
+ *
+ * @see javax.servlet.http.HttpServletRequest
  */
-
-
 public interface SimpleCommand {
-    void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+
+    /**
+     * Executes command which specified by implementing this interface
+     *
+     * @param request  a <code>HttpServletRequest</code> object specifying client request
+     * @param response a <code>HttpServletResponse</code> object assisting a servlet
+     *                 in sending a response to the client
+     * @throws ServletException
+     * @throws IOException
+     */
+    void execute(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException;
+
 }

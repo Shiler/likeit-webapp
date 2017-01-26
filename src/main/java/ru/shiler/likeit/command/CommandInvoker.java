@@ -1,9 +1,8 @@
 package ru.shiler.likeit.command;
 
 import org.apache.log4j.Logger;
-import ru.shiler.likeit.command.impl.async.*;
-import ru.shiler.likeit.command.impl.page.TopQuestionsPageCommand;
 import ru.shiler.likeit.command.impl.action.*;
+import ru.shiler.likeit.command.impl.async.*;
 import ru.shiler.likeit.command.impl.page.*;
 
 import javax.servlet.ServletException;
@@ -14,13 +13,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Evgeny Yushkevich on 12.01.2017.
+ * Main Command Pattern class which is the one that executes
+ * any {@link SimpleCommand} Command that is set to it.
+ *
+ * @see ru.shiler.likeit.command.SimpleCommand
  */
 public class CommandInvoker {
 
+    /**
+     * Map contains all of commands known by this application
+     */
     private Map<String, Class> commandMap = new HashMap<>();
+
+    /**
+     * Logger variable
+     */
     private final static Logger logger = Logger.getLogger(CommandInvoker.class);
 
+    /**
+     * Initializes <code>commandMap</code> variable with known URI patterns
+     * and their corresponding classes.
+     */
     public CommandInvoker() {
         commandMap.put("/app/index", IndexPageCommand.class);
         commandMap.put("/app/search", SearchPageCommand.class);
@@ -43,7 +56,22 @@ public class CommandInvoker {
         commandMap.put("/app/answer.edit", EditAnswerAsyncCommand.class);
     }
 
-    public void invoke(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    /**
+     * Creates an instance of a {@link SimpleCommand} class and executes it.
+     * If the command parent class is defined as {@link AbstractCommand}
+     * which uses DAO objects, completes it by calling <code>complete();</code> method.
+     *
+     * @param request  a <code>HttpServletRequest</code> object specifying client request
+     * @param response a <code>HttpServletResponse</code> object assisting a servlet
+     *                 in sending a response to the client
+     * @throws ServletException if a {@link javax.servlet.RequestDispatcher} can't
+     *                          dispatch JSP path
+     * @throws IOException
+     * @see ru.shiler.likeit.command.SimpleCommand
+     * @see ru.shiler.likeit.command.AbstractCommand
+     */
+    public void invoke(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String commandName = getCommandName(request);
         try {
             Class commandClass = commandMap.get(commandName);
@@ -54,7 +82,8 @@ public class CommandInvoker {
                     ((AbstractCommand) command).complete();
                 }
             } else if (commandName.startsWith("/app/")) {
-                ((SimpleCommand) commandMap.get("/app/index").newInstance()).execute(request, response);
+                ((SimpleCommand) commandMap.get("/app/index")
+                        .newInstance()).execute(request, response);
             }
         } catch (IllegalAccessException e) {
             logger.error(e);
@@ -63,6 +92,13 @@ public class CommandInvoker {
         }
     }
 
+    /**
+     * Selects <code>String</code> containing command name from {@link HttpServletRequest}
+     * URI. If request URI contains any parameters they will be trimmed.
+     *
+     * @param request a <code>HttpServletRequest</code> containing request URI
+     * @return <code>String</code> containing command name from <code>HttpServletRequest</code>
+     */
     private String getCommandName(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         if (requestURI.contains("?")) {

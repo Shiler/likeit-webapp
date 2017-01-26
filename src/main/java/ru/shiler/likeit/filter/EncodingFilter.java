@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
- * Created by Evgeny Yushkevich on 18.01.2017.
+ * Is used for the correct processing Cyrillic sent trough the <code>POST</code>.
  */
 public class EncodingFilter implements Filter {
     @Override

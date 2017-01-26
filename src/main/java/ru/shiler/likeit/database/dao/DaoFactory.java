@@ -3,16 +3,36 @@ package ru.shiler.likeit.database.dao;
 import ru.shiler.likeit.database.exception.PersistException;
 
 /**
- * Created by Evgeny Yushkevich on 22.11.2016.
+ * Defines a Factory interface for DAO objects
+ * specified by <code>Class</code>
+ *
+ * @param <Context> factory context, e.g. <code>Connection</code>
  */
 public interface DaoFactory<Context> {
 
-    public interface DaoCreator<Context> {
-        public GenericDao create(Context context);
+    /**
+     * Subsidiary interface for building DAO's
+     *
+     * @param <Context>
+     */
+    interface DaoCreator<Context> {
+        GenericDao create(Context context);
     }
 
-    public Context getContext() throws PersistException;
+    /**
+     * Context getter
+     *
+     * @return Context
+     * @throws PersistException
+     */
+    Context getContext() throws PersistException;
 
-    public GenericDao getDao(Context context, Class dtoClass) throws PersistException;
+    /**
+     * @param context
+     * @param dtoClass Corresponding model <code>Class</code>
+     * @return DAO object for {@code dtoClass} model
+     * @throws PersistException
+     */
+    GenericDao getDao(Context context, Class dtoClass) throws PersistException;
 
 }

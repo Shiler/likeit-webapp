@@ -1,7 +1,6 @@
 package ru.shiler.likeit.database;
 
 import org.apache.log4j.Logger;
-import ru.shiler.likeit.database.exception.PersistException;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -10,15 +9,30 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Created by Evgeny Yushkevich on 17.01.2017.
+ * A wrapper class working with application's <code>InitialContext</code>
+ * and its <code>DataSource</code>
  */
 public class ConnectionPool {
 
+    /**
+     * {@link InitialContext} static variable
+     */
     private static InitialContext INITIAL_CONTEXT;
+
+    /**
+     * {@link DataSource} static variable
+     */
     private static DataSource DATA_SOURCE;
 
+    /**
+     * Logger variable
+     */
     private final static Logger logger = Logger.getLogger(ConnectionPool.class);
 
+    /**
+     * Static initialization of the Pool variables.
+     * DataSource is obtained from JDBC driver
+     */
     static {
         try {
             INITIAL_CONTEXT = new InitialContext();
@@ -29,6 +43,11 @@ public class ConnectionPool {
 
     }
 
+    /**
+     * Returns a new <code>Connection</code> from Pool if it is possible.
+     *
+     * @return {@link java.sql.Connection} new thread-safe database connection
+     */
     public static Connection getConnection() {
         try {
             return DATA_SOURCE.getConnection();

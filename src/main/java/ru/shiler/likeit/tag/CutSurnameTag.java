@@ -9,7 +9,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import java.io.IOException;
 
 /**
- * Created by Evgeny Yushkevich on 18.01.2017.
+ * Used to cut long user surnames in tag body.
  */
 public class CutSurnameTag extends BodyTagSupport {
 

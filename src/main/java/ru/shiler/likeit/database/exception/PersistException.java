@@ -1,7 +1,9 @@
 package ru.shiler.likeit.database.exception;
 
+
 /**
- * Created by Evgeny Yushkevich on 22.11.2016.
+ * Is thrown when data persistence is violated and
+ * changes can not be applied.
  */
 public class PersistException extends Exception {
 

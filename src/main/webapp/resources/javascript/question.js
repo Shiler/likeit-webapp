@@ -10,21 +10,21 @@ $(document).ready(function () {
             type: "GET",
             dataType: 'json',
             success: function (data) {
-                switch (data.result) {
-                    case 'success': {
-                        $(this).removeAttr("checked");
-                        var rating = data.newRating;
-                        var voteCount = data.newVoteCount;
-                        var checkedStar = Math.floor(rating, 1);
-                        $('#star-'+checkedStar+'-'+answerId).attr('checked');
-                        $('#rating-'+answerId+'').text(rating);
-                        $('#voteCount-'+answerId+'').text(voteCount);
-                    }
-                        break;
-
-                    case 'false': {
-
-                    }
+                    switch (data.result) {
+                        case 'success': {
+                            $(this).removeAttr("checked");
+                            var rating = data.newRating;
+                            var voteCount = data.newVoteCount;
+                            var checkedStar = Math.floor(rating, 1);
+                            $('#star-'+checkedStar+'-'+answerId).attr('checked');
+                            $('#rating-'+answerId+'').text(rating);
+                            $('#voteCount-'+answerId+'').text(voteCount);
+                        }
+                            break;
+    
+                        case 'false': {
+    
+                        }
                         break;
                 }
             }

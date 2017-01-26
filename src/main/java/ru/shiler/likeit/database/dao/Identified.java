@@ -3,7 +3,9 @@ package ru.shiler.likeit.database.dao;
 import java.io.Serializable;
 
 /**
- * Created by Evgeny Yushkevich on 23.11.2016.
+ * Used to identify models from database by PK
+ *
+ * @param <PK> PrimaryKey of the database's table
  */
 public interface Identified<PK extends Serializable> {
     PK getId();

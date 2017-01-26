@@ -7,59 +7,64 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
- * Абстрактный класс предоставляющий базовую реализацию CRUD операций с использованием JDBC.
+ * Abstract class provides basic implementation of the CRUD operations
+ * using JDBC.
  *
- * @param <T>  тип объекта персистенции
- * @param <PK> тип первичного ключа
+ * @param <T>  persistence object type
+ * @param <PK> primary key type
  */
-public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integer> implements GenericDao<T, PK> {
+public abstract class AbstractJDBCDao<T extends Identified<PK>,
+        PK extends Integer> implements GenericDao<T, PK> {
 
     /**
-     * Возвращает sql запрос для получения всех записей.
+     * Returns a sql query for getting all records.
      * <p/>
      * SELECT * FROM [Table]
      */
     public abstract String getSelectQuery();
 
     /**
-     * Возвращает sql запрос для вставки новой записи в базу данных.
+     * Returns a sql query for a new record inserting to the database.
      * <p/>
      * INSERT INTO [Table] ([column, column, ...]) VALUES (?, ?, ...);
      */
     public abstract String getCreateQuery();
 
     /**
-     * Возвращает sql запрос для обновления записи.
+     * Returns a sql query for updating the records.
      * <p/>
      * UPDATE [Table] SET [column = ?, column = ?, ...] WHERE id = ?;
      */
     public abstract String getUpdateQuery();
 
     /**
-     * Возвращает sql запрос для удаления записи из базы данных.
+     * Returns a sql query for record deleting from the database.
      * <p/>
      * DELETE FROM [Table] WHERE id= ?;
      */
     public abstract String getDeleteQuery();
 
     /**
-     * Разбирает ResultSet и возвращает список объектов соответствующих содержимому ResultSet.
+     * Decomposes {@link ResultSet} and returns <code>List</code> of objects
+     * relevant to the <code>ResultSet</code>
      */
     protected abstract List<T> parseResultSet(ResultSet rs) throws PersistException;
 
     /**
-     * Устанавливает аргументы insert запроса в соответствии со значением полей объекта object.
+     * Sets up arguments of the <code>insert</code> query
+     * in accordance with the values of the object fields
      */
-    protected abstract void prepareStatementForInsert(PreparedStatement statement, T object) throws PersistException;
+    protected abstract void prepareStatementForInsert(PreparedStatement statement, T object)
+            throws PersistException;
 
     /**
-     * Устанавливает аргументы update запроса в соответствии со значением полей объекта object.
+     * Sets up arguments of the <code>update</code> query
+     * in accordance with the values of the object fields
      */
     protected abstract void prepareStatementForUpdate(PreparedStatement statement, T object) throws PersistException;
 
@@ -93,7 +98,7 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
     public List<T> getLimitOrderBy(String orderBy, int limit, boolean ascending) throws PersistException {
         List<T> result;
         String asc = ascending ? "ASC" : "DESC";
-        String query = getSelectQuery() + "ORDER BY `" + orderBy + "` " + asc +" LIMIT ?;";
+        String query = getSelectQuery() + "ORDER BY `" + orderBy + "` " + asc + " LIMIT ?;";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, limit);
@@ -123,7 +128,6 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
         if (object.getId() != null && object.getId() != Integer.valueOf(0)) {
             throw new PersistException("Object is already persist.");
         }
-        // Сохраняем зависимости
         //saveDependences(object);
 
         T persistInstance;
@@ -138,7 +142,6 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
         } catch (Exception e) {
             throw new PersistException(e);
         }
-        // Получаем только что вставленную запись
         sql = getSelectQuery() + " WHERE id = last_insert_id();";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery();
@@ -155,12 +158,10 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
 
     @Override
     public void update(T object) throws PersistException {
-        // Сохраняем зависимости
-        //saveDependences(object);
 
         String sql = getUpdateQuery();
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            prepareStatementForUpdate(statement, object); // заполнение аргументов запроса оставим на совесть потомков
+            prepareStatementForUpdate(statement, object);
             int count = statement.executeUpdate();
             if (count != 1) {
                 throw new PersistException("On update modify more then 1 record: " + count);
@@ -194,6 +195,14 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
         this.connection = connection;
     }
 
+    /**
+     * Returns dependence of the DAO
+     *
+     * @param dtoClass model class
+     * @param pk       primary key of the record
+     * @return depending model object
+     * @throws PersistException
+     */
     protected Identified getDependence(Class<? extends Identified> dtoClass, Serializable pk) throws PersistException {
         return parentFactory.getDao(connection, dtoClass).getByPK(pk);
     }

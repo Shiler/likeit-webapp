@@ -7,11 +7,10 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 /**
- * Created by Evgeny Yushkevich on 14.01.2017.
+ * Formats <code>timestamp</code> attribute using {@link TimestampUtils}
+ * depending on the <code>locale</code> attribute.
  */
 public class TimestampFormatTag extends SimpleTagSupport {
 

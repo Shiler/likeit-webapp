@@ -5,7 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
- * Created by Evgeny Yushkevich on 12.01.2017.
+ * <code>ResourceFilter</code> is a {@link Filter} that separates
+ * requests to the static resources from requests to the {@link ru.shiler.likeit.controller.AppController}
  */
 public class ResourceFilter implements Filter {
     @Override
@@ -19,9 +20,9 @@ public class ResourceFilter implements Filter {
         String path = req.getRequestURI().substring(req.getContextPath().length());
 
         if (path.startsWith("/resources/")) {
-            chain.doFilter(request, response); // Goes to default servlet.
+            chain.doFilter(request, response);
         } else {
-            request.getRequestDispatcher("/app" + path).forward(request, response); // Goes to your controller.
+            request.getRequestDispatcher("/app" + path).forward(request, response);
         }
     }
 

@@ -1,8 +1,5 @@
 package ru.shiler.likeit.database.dao;
 
-/**
- * Created by Evgeny Yushkevich on 12.01.2017.
- */
 
 import ru.shiler.likeit.database.exception.PersistException;
 
@@ -10,10 +7,10 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 
 /**
- * Отвечает за реализацию связи многие-к-одному.
+ * Responds for implementing relation many-to-many.
  *
- * @param <Owner>      класс объекта, чье поле ссылается на зависимый объект.
- * @param <Dependence> класс зависимого объекта.
+ * @param <Owner>      an object class whose field references to dependence object.
+ * @param <Dependence> class of the dependent object.
  */
 public class ManyToOne<Owner extends Identified, Dependence extends Identified> {
 
@@ -33,11 +30,13 @@ public class ManyToOne<Owner extends Identified, Dependence extends Identified> 
         field.set(owner, dependence);
     }
 
-    public Identified persistDependence(Owner owner, Connection connection) throws IllegalAccessException, PersistException {
+    public Identified persistDependence(Owner owner, Connection connection)
+            throws IllegalAccessException, PersistException {
         return factory.getDao(connection, field.getType()).persist(getDependence(owner));
     }
 
-    public void updateDependence(Owner owner, Connection connection) throws IllegalAccessException, PersistException {
+    public void updateDependence(Owner owner, Connection connection)
+            throws IllegalAccessException, PersistException {
         factory.getDao(connection, field.getType()).update(getDependence(owner));
     }
 
@@ -51,7 +50,8 @@ public class ManyToOne<Owner extends Identified, Dependence extends Identified> 
         return hash;
     }
 
-    public ManyToOne(Class<Owner> ownerClass, DaoFactory<Connection> factory, String field) throws NoSuchFieldException {
+    public ManyToOne(Class<Owner> ownerClass, DaoFactory<Connection> factory, String field)
+            throws NoSuchFieldException {
         this.factory = factory;
         this.field = ownerClass.getDeclaredField(field);
         this.field.setAccessible(true);
