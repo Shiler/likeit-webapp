@@ -44,8 +44,8 @@
                                             <a href="/profile?id=${item.creator.id}"><p>${item.creator.fullName}</p></a>
                                         </td>
                                         <td class="col-sm-9">
-                                            <div id="answerTextBlock">
-                                                <p id="answerText">${item.text}</p>
+                                            <div id="answerTextBlock-${item.id}">
+                                                <p id="answerText-${item.id}">${item.text}</p>
                                             </div>
                                             <hr>
                                             <c:set var="rate" value="${fn:substringBefore(item.rating, '.')}"/>

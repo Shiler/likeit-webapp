@@ -6,25 +6,25 @@ $(document).ready(function () {
         var rate = idAttr.pop();
         $.ajax({
 
-            url: '/answer.rate?answerId='+answerId+'&rate='+rate,
+            url: '/answer.rate?answerId=' + answerId + '&rate=' + rate,
             type: "GET",
             dataType: 'json',
             success: function (data) {
-                    switch (data.result) {
-                        case 'success': {
-                            $(this).removeAttr("checked");
-                            var rating = data.newRating;
-                            var voteCount = data.newVoteCount;
-                            var checkedStar = Math.floor(rating, 1);
-                            $('#star-'+checkedStar+'-'+answerId).attr('checked');
-                            $('#rating-'+answerId+'').text(rating);
-                            $('#voteCount-'+answerId+'').text(voteCount);
-                        }
-                            break;
-    
-                        case 'false': {
-    
-                        }
+                switch (data.result) {
+                    case 'success': {
+                        $(this).removeAttr("checked");
+                        var rating = data.newRating;
+                        var voteCount = data.newVoteCount;
+                        var checkedStar = Math.floor(rating, 1);
+                        $('#star-' + checkedStar + '-' + answerId).attr('checked');
+                        $('#rating-' + answerId + '').text(rating);
+                        $('#voteCount-' + answerId + '').text(voteCount);
+                    }
+                        break;
+
+                    case 'false': {
+
+                    }
                         break;
                 }
             }
@@ -33,6 +33,10 @@ $(document).ready(function () {
     });
 
     $('#deleteAnswerLink').click(function (e) {
+        onAnswerDelete(e);
+    });
+
+    function onAnswerDelete(e) {
         e.preventDefault();
         $.ajax({
             url: $('#deleteAnswerLink').attr('href'),
@@ -55,15 +59,19 @@ $(document).ready(function () {
             }
 
         });
-    });
+    }
 
     $('#editAnswerLink').click(function (e) {
+        onAnswerEdit(e);
+    });
+
+    function onAnswerEdit(e) {
         e.preventDefault();
         answerId = $('#editAnswerLink').attr('href').replace('/answer.edit?id=', '');
-        var answerText = document.getElementById("answerText").innerText;
+        var answerText = document.getElementById("answerText-"+answerId).innerText;
         console.log(answerText);
-        var tempAnswerParagraph = $('#answerTextBlock').find('p');
-        $('#answerTextBlock').find('p').remove();
+        var tempAnswerParagraph = $('#answerTextBlock-'+answerId).find('p');
+        $('#answerTextBlock-'+answerId).find('p').remove();
         var answerEditTextarea = $('<textarea class="form-textarea" rows="5" name="text"></textarea>');
         $(answerEditTextarea).val(answerText);
         var answerEditConfirm = $('<input class="btn btn-small" type="button" value="OK"/>');
@@ -73,13 +81,13 @@ $(document).ready(function () {
             $(answerEditTextarea).remove();
             $(answerEditConfirm).remove();
             $(answerEditDeny).remove();
-            $('#answerTextBlock').find('br').remove();
-            $('#answerTextBlock').append(tempAnswerParagraph);
+            $('#answerTextBlock-'+answerId).find('br').remove();
+            $('#answerTextBlock-'+answerId).append(tempAnswerParagraph);
         });
 
         $(answerEditConfirm).click(function () {
             $.ajax({
-                url: $('#editAnswerLink').attr('href') + '&text='+answerEditTextarea.val(),
+                url: $('#editAnswerLink').attr('href') + '&text=' + answerEditTextarea.val(),
                 type: "GET",
                 dataType: 'json',
                 success: function (data) {
@@ -89,17 +97,17 @@ $(document).ready(function () {
                     $(answerEditTextarea).remove();
                     $(answerEditConfirm).remove();
                     $(answerEditDeny).remove();
-                    $('#answerTextBlock').find('br').remove();
-                    $('#answerTextBlock').append(tempAnswerParagraph);
+                    $('#answerTextBlock-'+answerId).find('br').remove();
+                    $('#answerTextBlock-'+answerId).append(tempAnswerParagraph);
                 }
             });
         });
 
-        $('#answerTextBlock').append(answerEditTextarea);
-        $('#answerTextBlock').append($('<br>'));
-        $('#answerTextBlock').append(answerEditConfirm);
-        $('#answerTextBlock').append(answerEditDeny);
-    });
+        $('#answerTextBlock-'+answerId).append(answerEditTextarea);
+        $('#answerTextBlock-'+answerId).append($('<br>'));
+        $('#answerTextBlock-'+answerId).append(answerEditConfirm);
+        $('#answerTextBlock-'+answerId).append(answerEditDeny);
+    }
 
     $('#likeLink').click(function (e) {
         e.preventDefault();
@@ -159,6 +167,7 @@ $(document).ready(function () {
 
                         var table = $('#answersTable').find('tbody');
                         var answerRow = document.createElement('tr');
+                        $(answerRow).attr('id', 'answer-'+data.answerId);
                         var profileCol = document.createElement('td');
                         $(profileCol).attr('class', 'col-sm-2');
                         var profileLink = document.createElement('a');
@@ -170,9 +179,15 @@ $(document).ready(function () {
 
                         var answerCol = document.createElement('td');
                         $(answerCol).attr('class', 'col-sm-9');
+                        var answTextBlock = document.createElement('div');
+                        $(answTextBlock).attr('id', 'answerTextBlock-'+data.answerId);
+                        var answText = document.createElement('div');
+                        $(answText).attr('id', 'answerText-'+data.answerId);
                         var answerText = document.createElement('p');
                         $(answerText).html(text);
-                        $(answerCol).append(answerText);
+                        $(answTextBlock).append(answText);
+                        $(answText).append(answerText);
+                        $(answerCol).append(answTextBlock);
                         $(answerCol).append(document.createElement('hr'));
                         var answerRating = document.createElement('p');
                         $(answerRating).html(rating);
@@ -184,15 +199,21 @@ $(document).ready(function () {
                         var editDelete = document.createElement('p');
                         var editLink = document.createElement('a');
                         $(editLink).attr('id', 'editAnswerLink');
-                        $(editLink).attr('href', '/answer.edit?id='+data.answerId);
+                        $(editLink).attr('href', '/answer.edit?id=' + data.answerId);
                         var editSpan = document.createElement('span');
                         $(editSpan).attr('class', 'glyphicon glyphicon-pencil');
                         $(editLink).append(editSpan);
+                        $(editLink).click(function (e) {
+                            onAnswerEdit(e);
+                        });
                         $(editDelete.append(editLink));
                         $(editDelete).append(' ');
                         var deleteLink = document.createElement('a');
                         $(deleteLink).attr('id', 'deleteAnswerLink');
-                        $(deleteLink).attr('href', '/answer.delete?id='+data.answerId);
+                        $(deleteLink).attr('href', '/answer.delete?id=' + data.answerId);
+                        $(deleteLink).click(function (e) {
+                            onAnswerDelete(e);
+                        });
                         var deleteSpan = document.createElement('span');
                         $(deleteSpan).attr('class', 'glyphicon glyphicon-remove');
                         $(deleteLink).append(deleteSpan);
